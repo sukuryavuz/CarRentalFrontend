@@ -8,6 +8,7 @@ $(document).ready(function(){
     var carID;
     var carIDrent;
     var carIDremove;
+    var jwtToken;
     // REQUESTS FÜR CAR
     $("#createNewCar").on("click", function(){
         availableSeats = $("#availableSeats").val()
@@ -22,21 +23,19 @@ $(document).ready(function(){
                 "availableSeats": availableSeats,
                 "dayPrice": dayPrice,
                 "transmission": transmission
-            }),
-            success:function(xhr, status){
+            })
+        }).done(function(){
                 alert("success");
-            },
-            error:function(xhr, status, error){
-                alert(xhr.responseText);
-            }
+        }).fail(function(xhr) {
+            alert(xhr.responseText);
         });
     });
     $("#getAllCars").on("click", function(){
         $.ajax({
             url:"http://localhost:8080/cars",
             type: "GET",
-            dataType: 'json',
-            success:function(data){
+            dataType: 'json'
+        }).done(function(data){
                 var col = [];
                 for (var i = 0; i < data.length; i++) {
                     for (var key in data[i]) {
@@ -66,30 +65,26 @@ $(document).ready(function(){
                 var divContainer = document.getElementById("showAllCars");
                 divContainer.innerHTML = "";
                 divContainer.appendChild(table);
-            },
-            error:function(xhr, status, error){
+            }).fail(function (xhr){
                 alert(xhr.responseText);
-            }
-        });
+            })
     });
     $("#getCar").on("click", function(){
         carID = $("#carID").val();
         $.ajax({
             url:"http://localhost:8080/cars/" + carID,
-            type: "GET",
-            success:function(xhr, status){
+            type: "GET"
+        }).done(function(){
                 alert("success");
-            },
-            error:function(xhr, status, error){
+            }).fail(function (xhr){
                 alert(xhr.responseText);
-            }
-        });
+            })
     });
     $("#getAvailableCars").on("click", function(){
         $.ajax({
             url:"http://localhost:8080/cars/availableCars",
-            type: "GET",
-            success:function(data){
+            type: "GET"
+        }).done(function(data){
                 var col = [];
                 for (var i = 0; i < data.length; i++) {
                     for (var key in data[i]) {
@@ -122,11 +117,9 @@ $(document).ready(function(){
                 var divContainer = document.getElementById("showAvailableCars");
                 divContainer.innerHTML = "";
                 divContainer.appendChild(table);
-            },
-            error:function(xhr, status, error){
+            }).fail(function(xhr){
                 alert(xhr.responseText);
-            }
-        });
+            })
     });
     // BIS HIER REQUESTS FÜR CAR
     // REQUESTS FÜR USER
@@ -141,15 +134,13 @@ $(document).ready(function(){
             data: JSON.stringify({
                 "username": username,
                 "password": password
-            }),
-            success:function(responseJSON){
+            })
+        }).done(function(responseJSON){
                 userID = responseJSON.id
                 alert(userID + " registriert")
-            },
-            error:function(xhr, status, error){
+            }).fail(function(xhr){
                 alert(xhr.responseText);
-            }
-        });
+            })
     });
     $("#loginBtn").on("click", function(){
         username = $("#username").val()
@@ -162,19 +153,19 @@ $(document).ready(function(){
             data: JSON.stringify({
                 "username": username,
                 "password": password
-            }),
-            success:function(responseJSON){
-                userID = responseJSON.id;
-                alert(userID + " eingelogged")
+            })
+        }).done(function(responseJSON){
+                userID = responseJSON.userId;
+                jwtToken = responseJSON.jwtToken;
+                alert(userID + " eingelogged " + jwtToken)
                 //alert(responseJSON[0].id);
                 $("#login").addClass("notdisplay")
                 $("#loggedIn").removeAttr("style")
-            },
-            error:function(xhr, status, error){
+            }).fail(function(xhr){
                 alert(xhr.responseText);
-            }
-        });
+            })
     });
+
     // BIS HIER REQUESTS FÜR USER
     // REQUESTS UM AUTO AUSZULEIHEN UND ZURÜCKGEBEN
     $("#addCarToUser").on("click", function(){
@@ -182,31 +173,22 @@ $(document).ready(function(){
         $.ajax({
             url:"http://localhost:8080/users/" + userID + "/cars/" + carIDrent,
             type: "POST",
-            statusCode: {
-                500: function(){
-                    alert("The car with this Car-ID is already rented")
-                }
-            },
-            success:function(){
+        }).done(function(){
                 alert("car with carid: " + carIDrent + "is added to user with userid: " + userID);
-            },
-            error:function(xhr, status, error){
-            }
-        });
+            }).fail(function(xhr){
+                alert(xhr.responseText)
+            })
     });
     $("#removeCarFromUser").on("click", function(){
         carIDremove = $("#carIDremove").val();
         $.ajax({
             url:"http://localhost:8080/users/" + userID + "/cars/" + carIDremove,
-            type: "DELETE",
-            success:function(){
+            type: "DELETE"
+        }).done(function(){
                 alert("car with carid: " + carIDremove + "was given back by user with userid: " + userID);
-            },
-            error:function(xhr, status, error){
+            }).fail(function(xhr){
                 alert(xhr.responseText);
-            }
-        });
+            })
     });
     // BIS HIER REQUESTS UM AUTO AUSZULEIHEN UND ZURÜCKGEBEN
-
 });
