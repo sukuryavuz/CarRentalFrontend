@@ -1,14 +1,14 @@
 $(document).ready(function(){
-    var username;
+    var username; // wird in localstorage gespeichert
     var password;
-    var userID;
+    var userID; // wird in localstorage gespeichert
     var availableSeats;
     var dayPrice;
     var transmission;
     var carID;
     var carIDrent;
     var carIDremove;
-    var jwtToken;
+    var jwtToken; // wird in sessionstorage gespeichert
     // REQUESTS FÜR USER
     $("#register").on("click", function(){
         username = $("#username").val()
