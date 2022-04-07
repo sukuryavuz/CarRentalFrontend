@@ -194,10 +194,41 @@ $(document).ready(function(){
             headers: {
                 Authorization: sessionStorage.getItem("token")
             }
-        }).done(function(responseJSON){
-            if(responseJSON.length) {
+        }).done(function(data){
+            if(data.length === 0) {
                 alert("You have not any cars rented yet")
             } else {
+                var col = [];
+                for (var i = 0; i < data.length; i++) {
+                    for (var key in data[i]) {
+                        if (col.indexOf(key) === -1) {
+                            col.push(key);
+                        }
+                    }
+                }
+                // CREATE DYNAMIC TABLE.
+                var table = document.createElement("table");
+                table.setAttribute("id", "myCars")
+                // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+                var tr = table.insertRow(-1);                   // TABLE ROW.
+                for (var i = 0; i < col.length; i++) {
+                    var th = document.createElement("th");      // TABLE HEADER.
+                    th.setAttribute('id', col[i]);
+                    th.innerHTML = col[i];
+                    tr.appendChild(th);
+                }
+                // ADD JSON DATA TO THE TABLE AS ROWS.
+                for (var i = 0; i < data.length; i++) {
+                    tr = table.insertRow(-1);
+                    for (var j = 0; j < col.length; j++) {
+                        var tabCell = tr.insertCell(-1);
+                        tabCell.innerHTML = data[i][col[j]];
+                    }
+                }
+                // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+                var divContainer = document.getElementById("showMyCars");
+                divContainer.innerHTML = "";
+                divContainer.appendChild(table);
                 //TODO: zurückgeliefertes JSON in Tabelle einfügen und in der UI anzeigen
             }
         }).fail(function(xhr){
