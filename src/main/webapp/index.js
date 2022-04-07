@@ -48,7 +48,8 @@ $(document).ready(function(){
         }).done(function(responseJSON){
             userID = responseJSON.userId;
             jwtToken = responseJSON.jwtToken;
-            sessionStorage.setItem("userId", userID);
+            localStorage.setItem("userID", userID);
+            localStorage.setItem("username", username)
             sessionStorage.setItem("token", "Bearer " + jwtToken);
             alert(userID + " eingelogged " + jwtToken)
             //alert(responseJSON[0].id);
