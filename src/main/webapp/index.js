@@ -19,6 +19,9 @@ $(document).ready(function(){
             type: "POST",
             contentType: 'application/json',
             dataType: 'json',
+            headers: {
+                Authorization: sessionStorage.getItem("token")
+            },
             data: JSON.stringify({
                 "availableSeats": availableSeats,
                 "dayPrice": dayPrice,
@@ -34,7 +37,10 @@ $(document).ready(function(){
         $.ajax({
             url:"http://localhost:8080/cars",
             type: "GET",
-            dataType: 'json'
+            dataType: 'json',
+            headers: {
+                Authorization: sessionStorage.getItem("token")
+            }
         }).done(function(data){
                 var col = [];
                 for (var i = 0; i < data.length; i++) {
@@ -73,7 +79,10 @@ $(document).ready(function(){
         carID = $("#carID").val();
         $.ajax({
             url:"http://localhost:8080/cars/" + carID,
-            type: "GET"
+            type: "GET",
+            headers: {
+                Authorization: sessionStorage.getItem("token")
+            },
         }).done(function(){
                 alert("success");
             }).fail(function (xhr){
@@ -83,7 +92,11 @@ $(document).ready(function(){
     $("#getAvailableCars").on("click", function(){
         $.ajax({
             url:"http://localhost:8080/cars/availableCars",
-            type: "GET"
+            type: "GET",
+            dataType: 'json',
+            headers: {
+                "Authorization": sessionStorage.getItem("token")
+            }
         }).done(function(data){
                 var col = [];
                 for (var i = 0; i < data.length; i++) {
@@ -157,6 +170,8 @@ $(document).ready(function(){
         }).done(function(responseJSON){
                 userID = responseJSON.userId;
                 jwtToken = responseJSON.jwtToken;
+                sessionStorage.setItem("userId", userID);
+                sessionStorage.setItem("token", "Bearer " + jwtToken);
                 alert(userID + " eingelogged " + jwtToken)
                 //alert(responseJSON[0].id);
                 $("#login").addClass("notdisplay")
@@ -173,6 +188,9 @@ $(document).ready(function(){
         $.ajax({
             url:"http://localhost:8080/users/" + userID + "/cars/" + carIDrent,
             type: "POST",
+            headers: {
+                Authorization: sessionStorage.getItem("token")
+            }
         }).done(function(){
                 alert("car with carid: " + carIDrent + "is added to user with userid: " + userID);
             }).fail(function(xhr){
@@ -183,7 +201,10 @@ $(document).ready(function(){
         carIDremove = $("#carIDremove").val();
         $.ajax({
             url:"http://localhost:8080/users/" + userID + "/cars/" + carIDremove,
-            type: "DELETE"
+            type: "DELETE",
+            headers: {
+                Authorization: sessionStorage.getItem("token")
+            }
         }).done(function(){
                 alert("car with carid: " + carIDremove + "was given back by user with userid: " + userID);
             }).fail(function(xhr){
