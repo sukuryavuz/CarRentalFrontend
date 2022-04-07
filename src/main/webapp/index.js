@@ -186,6 +186,24 @@ $(document).ready(function(){
                 alert(xhr.responseText);
             })
     });
+    $("#getCars").on("click", function(){
+        $.ajax({
+            url:"http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars",
+            type:"GET",
+            dataType: 'json',
+            headers: {
+                Authorization: sessionStorage.getItem("token")
+            }
+        }).done(function(responseJSON){
+            if(responseJSON.length) {
+                alert("You have not any cars rented yet")
+            } else {
+                //TODO: zurückgeliefertes JSON in Tabelle einfügen und in der UI anzeigen
+            }
+        }).fail(function(xhr){
+            alert(xhr.responseText)
+        })
+    });
     // BIS HIER REQUESTS FÜR CAR
     // REQUESTS UM AUTO AUSZULEIHEN UND ZURÜCKGEBEN
     $("#addCarToUser").on("click", function(){
