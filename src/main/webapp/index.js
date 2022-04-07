@@ -9,6 +9,53 @@ $(document).ready(function(){
     var carIDrent;
     var carIDremove;
     var jwtToken;
+    // REQUESTS FÜR USER
+    $("#register").on("click", function(){
+        username = $("#username").val()
+        password = $("#password").val()
+        $.ajax({
+            url:"http://localhost:8080/register",
+            type: "POST",
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+                "username": username,
+                "password": password
+            })
+        }).done(function(responseJSON){
+            userID = responseJSON.id
+            alert(userID + " registriert")
+        }).fail(function(xhr){
+            alert(xhr.responseText);
+        })
+    });
+    $("#loginBtn").on("click", function(){
+        username = $("#username").val()
+        password = $("#password").val()
+        $.ajax({
+            url:"http://localhost:8080/login",
+            type: "POST",
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+                "username": username,
+                "password": password
+            })
+        }).done(function(responseJSON){
+            userID = responseJSON.userId;
+            jwtToken = responseJSON.jwtToken;
+            sessionStorage.setItem("userId", userID);
+            sessionStorage.setItem("token", "Bearer " + jwtToken);
+            alert(userID + " eingelogged " + jwtToken)
+            //alert(responseJSON[0].id);
+            $("#login").addClass("notdisplay")
+            $("#loggedIn").removeAttr("style")
+        }).fail(function(xhr){
+            alert(xhr.responseText);
+        })
+    });
+    // BIS HIER REQUESTS FÜR USER
+
     // REQUESTS FÜR CAR
     $("#createNewCar").on("click", function(){
         availableSeats = $("#availableSeats").val()
@@ -135,53 +182,6 @@ $(document).ready(function(){
             })
     });
     // BIS HIER REQUESTS FÜR CAR
-    // REQUESTS FÜR USER
-    $("#register").on("click", function(){
-        username = $("#username").val()
-        password = $("#password").val()
-        $.ajax({
-            url:"http://localhost:8080/register",
-            type: "POST",
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify({
-                "username": username,
-                "password": password
-            })
-        }).done(function(responseJSON){
-                userID = responseJSON.id
-                alert(userID + " registriert")
-            }).fail(function(xhr){
-                alert(xhr.responseText);
-            })
-    });
-    $("#loginBtn").on("click", function(){
-        username = $("#username").val()
-        password = $("#password").val()
-        $.ajax({
-            url:"http://localhost:8080/login",
-            type: "POST",
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify({
-                "username": username,
-                "password": password
-            })
-        }).done(function(responseJSON){
-                userID = responseJSON.userId;
-                jwtToken = responseJSON.jwtToken;
-                sessionStorage.setItem("userId", userID);
-                sessionStorage.setItem("token", "Bearer " + jwtToken);
-                alert(userID + " eingelogged " + jwtToken)
-                //alert(responseJSON[0].id);
-                $("#login").addClass("notdisplay")
-                $("#loggedIn").removeAttr("style")
-            }).fail(function(xhr){
-                alert(xhr.responseText);
-            })
-    });
-
-    // BIS HIER REQUESTS FÜR USER
     // REQUESTS UM AUTO AUSZULEIHEN UND ZURÜCKGEBEN
     $("#addCarToUser").on("click", function(){
         carIDrent = $("#carIDrent").val();
