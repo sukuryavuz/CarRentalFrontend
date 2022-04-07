@@ -25,8 +25,12 @@ $(document).ready(function(){
         }).done(function(responseJSON){
             userID = responseJSON.id
             alert(userID + " registriert")
+            $("#username").val('')
+            $("#password").val('')
         }).fail(function(xhr){
             alert(xhr.responseText);
+            $("#username").val('')
+            $("#password").val('')
         })
     });
     $("#loginBtn").on("click", function(){
@@ -52,10 +56,11 @@ $(document).ready(function(){
             $("#loggedIn").removeAttr("style")
         }).fail(function(xhr){
             alert(xhr.responseText);
+            $("#username").val('')
+            $("#password").val('')
         })
     });
     // BIS HIER REQUESTS FÜR USER
-
     // REQUESTS FÜR CAR
     $("#createNewCar").on("click", function(){
         availableSeats = $("#availableSeats").val()
@@ -161,7 +166,6 @@ $(document).ready(function(){
                 for (var i = 0; i < col.length; i++) {
                     var th = document.createElement("th");      // TABLE HEADER.
                     th.setAttribute('id', col[i]);
-                    th.setAttribute("onclick", "sortTable(" +i+")")
                     th.innerHTML = col[i];
                     tr.appendChild(th);
                 }
