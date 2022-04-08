@@ -149,3 +149,8 @@ function createTable(data, tableId, divId) {
     divContainer.innerHTML = "";
     divContainer.appendChild(table);
 }
+function logout() {
+    localStorage.removeItem("username");
+    localStorage.removeItem("userID")
+    localStorage.removeItem("token")
+}
