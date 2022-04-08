@@ -6,10 +6,23 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-<form id="login" action="homepage.html" onsubmit="saveData()">
-    Username: <input type="text" id="username"><br>
-    Password: <input type="password" id="password"><br>
-    <input type="submit" id="loginBtn" name="login" value="login">
-</form>
-<input type="button" id="register" name="register" value="register">
+<div class="center">
+    <h1>Car Rental Group 3</h1>
+    <form id="login" action="homepage.html" onsubmit="saveData()">
+        <div class="inputbox">
+            <input type="text" id="username" required="required">
+            <span>Username</span>
+        </div>
+        <div class="inputbox">
+            <input type="password" id="password" required="required">
+            <span>Password</span>
+        </div>
+        <div class="inputbox">
+        <input type="submit" id="loginBtn" name="login" value="login">
+        </div>
+    </form>
+    <div class="inputbox">
+        <input type="button" id="register" name="register" value="register">
+    </div>
+</div>
 </body>

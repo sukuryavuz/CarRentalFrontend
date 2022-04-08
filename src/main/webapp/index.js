@@ -26,7 +26,6 @@ $(document).ready(function() {
     });
 })
 function saveData(){
-    alert("in saveData drinnen")
     var username = $("#username").val()
     var password = $("#password").val()
     $.ajax({
