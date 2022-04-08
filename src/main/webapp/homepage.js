@@ -1,0 +1,151 @@
+$(document).ready(function(){
+    console.log("userID: " + localStorage.getItem("userID"))
+    console.log("username: " + localStorage.getItem("username"))
+    console.log(localStorage.getItem("token"))
+    var userID,availableSeats,dayPrice,transmission,carID,carIDrent,carIDremove;
+    $("#createNewCar").on("click", function(){
+        availableSeats = $("#availableSeats").val()
+        dayPrice = $("#dayPrice").val()
+        transmission = $("#transmission").val()
+        $.ajax({
+            url:"http://localhost:8080/cars",
+            type: "POST",
+            contentType: 'application/json',
+            dataType: 'json',
+            headers: {
+                Authorization: localStorage.getItem("token")
+            },
+            data: JSON.stringify({
+                "availableSeats": availableSeats,
+                "dayPrice": dayPrice,
+                "transmission": transmission
+            })
+        }).done(function(){
+            alert("success");
+        }).fail(function(xhr) {
+            alert(xhr.responseText);
+        });
+    });
+    $("#getAllCars").on("click", function(){
+        $.ajax({
+            url:"http://localhost:8080/cars",
+            type: "GET",
+            dataType: 'json',
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        }).done(function(data){
+            createTable(data, "allCarsId", "showAllCars");
+        }).fail(function (xhr){
+            alert(xhr.responseText);
+        })
+    });
+    $("#getCar").on("click", function(){
+        carID = $("#carID").val();
+        $.ajax({
+            url:"http://localhost:8080/cars/" + carID,
+            type: "GET",
+            headers: {
+                Authorization: localStorage.getItem("token")
+            },
+        }).done(function(){
+            alert("success");
+        }).fail(function (xhr){
+            alert(xhr.responseText);
+        })
+    });
+    $("#getAvailableCars").on("click", function(){
+        $.ajax({
+            url:"http://localhost:8080/cars/availableCars",
+            type: "GET",
+            dataType: 'json',
+            headers: {
+                "Authorization": localStorage.getItem("token")
+            }
+        }).done(function(data){
+            createTable(data, "availableCars", "showAvailableCars")
+        }).fail(function(xhr){
+            alert(xhr.responseText);
+        })
+    });
+    $("#getCars").on("click", function(){
+        $.ajax({
+            url:"http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars",
+            type:"GET",
+            dataType: 'json',
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        }).done(function(data){
+            if(data.length === 0) {
+                alert("You have not any cars rented yet")
+            } else {
+                createTable(data, "myCars", "showMyCars");
+            }
+        }).fail(function(xhr){
+            alert(xhr.responseText)
+        })
+    });
+    // REQUESTS UM AUTO AUSZULEIHEN UND ZURÜCKGEBEN
+    $("#addCarToUser").on("click", function(){
+        carIDrent = $("#carIDrent").val();
+        $.ajax({
+            url:"http://localhost:8080/users/" + userID + "/cars/" + carIDrent,
+            type: "POST",
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        }).done(function(){
+            alert("car with carid: " + carIDrent + "is added to user with userid: " + userID);
+        }).fail(function(xhr){
+            alert(xhr.responseText)
+        })
+    });
+    $("#removeCarFromUser").on("click", function(){
+        carIDremove = $("#carIDremove").val();
+        $.ajax({
+            url:"http://localhost:8080/users/" + userID + "/cars/" + carIDremove,
+            type: "DELETE",
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        }).done(function(){
+            alert("car with carid: " + carIDremove + "was given back by user with userid: " + userID);
+        }).fail(function(xhr){
+            alert(xhr.responseText);
+        })
+    });
+});
+
+function createTable(data, tableId, divId) {
+    var col = [];
+    for (var i = 0; i < data.length; i++) {
+        for (var key in data[i]) {
+            if (col.indexOf(key) === -1) {
+                col.push(key);
+            }
+        }
+    }
+    // CREATE DYNAMIC TABLE.
+    var table = document.createElement("table");
+    table.setAttribute("id", tableId);
+    // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+    var tr = table.insertRow(-1);                   // TABLE ROW.
+    for (var i = 0; i < col.length; i++) {
+        var th = document.createElement("th");      // TABLE HEADER.
+        th.innerHTML = col[i];
+        tr.appendChild(th);
+    }
+    // ADD JSON DATA TO THE TABLE AS ROWS.
+    for (var i = 0; i < data.length; i++) {
+        tr = table.insertRow(-1);
+        for (var j = 0; j < col.length; j++) {
+            var tabCell = tr.insertCell(-1);
+            tabCell.innerHTML = data[i][col[j]];
+        }
+    }
+    // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+    var divContainer = document.getElementById(divId);
+    divContainer.innerHTML = "";
+    divContainer.appendChild(table);
+}

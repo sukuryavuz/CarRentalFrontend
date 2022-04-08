@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <head>
     <title>Document</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -5,43 +6,10 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-<div id="login">
+<form id="login" action="homepage.html" onsubmit="saveData()">
     Username: <input type="text" id="username"><br>
     Password: <input type="password" id="password"><br>
-    <input type="button" id="loginBtn" name="login" value="login">
-    <input type="button" id="register" name="register" value="register">
-</div>
-
-<div id="loggedIn" style="display: none">
-    <div id="divCreateNewCar">
-        available Seats: <input type="number" id="availableSeats">
-        Day Price: <input type="number" id="dayPrice">
-        Transmission: <input type="text" id="transmission">
-        <input type="button" id="createNewCar" name="createNewCar" value="createNewCar">
-    </div>
-    <div id="divGetAllCars">
-        <input type="button" id="getAllCars" name="getAllCars" value="getAllCars">
-        <p id="showAllCars"></p>
-    </div>
-    <div id="divGetCar">
-        Car-ID: <input type="number" id="carID">
-        <input type="button" id="getCar" name="getCar" value="getCar">
-    </div>
-    <div id="divAddCarToUser">
-        Car-ID of the Car you want to rent: <input type="number" id="carIDrent">
-        <input type="button" id="addCarToUser" name="addCarToUser" value="addCarToUser">
-    </div>
-    <div id="divRemoveCarFromUser">
-        CAR-ID of the Car you want to give back: <input type="number" id="carIDremove">
-        <input type="button" id="removeCarFromUser" name="removeCarFromUser" value="removeCarFromUser">
-    </div>
-    <div id="divGetAvailableCars">
-        <input type="button" id="getAvailableCars" value="get Available Cars">
-        <p id="showAvailableCars"></p>
-    </div>
-    <div id="divGetCars">
-        <input type="button" id="getCars" value="get my Cars">
-        <p id="showMyCars"></p>
-    </div>
-</div>
+    <input type="submit" id="loginBtn" name="login" value="login">
+</form>
+<input type="button" id="register" name="register" value="register">
 </body>
