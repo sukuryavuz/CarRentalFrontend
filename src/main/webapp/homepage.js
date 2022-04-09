@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function () {
     console.log("userID: " + localStorage.getItem("userID"))
     console.log("username: " + localStorage.getItem("username"))
     console.log(localStorage.getItem("token"))
@@ -125,9 +125,25 @@ function rentCar(carIDrent) {
             Authorization: localStorage.getItem("token")
         }
     }).done(function () {
-        alert("car with carid: " + carIDrent + "is added to user with userid: " + localStorage.getItem("userID"));
+        // alert("car with carid: " + carIDrent + "is added to user with userid: " + localStorage.getItem("userID"));
+        getAvailableCars();
     }).fail(function (xhr) {
         alert(xhr.responseText)
+    })
+}
+
+function removeCar(carIDremove) {
+    $.ajax({
+        url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars/" + carIDremove,
+        type: "DELETE",
+        headers: {
+            Authorization: localStorage.getItem("token")
+        }
+    }).done(function () {
+        // alert("car with carid: " + carIDremove + "was given back by user with userid: " + localStorage.getItem("userID"));
+        getMyCars();
+    }).fail(function (xhr) {
+        alert(xhr.responseText);
     })
 }
 
@@ -136,40 +152,39 @@ function getAllCars() {
     $("#showAvailableCars").html("")
     $("#showMyCars").html("")
     $.ajax({
-        url:"http://localhost:8080/cars",
+        url: "http://localhost:8080/cars",
         type: "GET",
         dataType: 'json',
         headers: {
             Authorization: localStorage.getItem("token")
         }
-    }).done(function(data){
+    }).done(function (data) {
         createTable(data, "allCarsId", "showAllCars");
-    }).fail(function (xhr){
+    }).fail(function (xhr) {
         alert(xhr.responseText);
     })
 }
-let global;
+
 function getAvailableCars() {
     $("#showAllCars").html("")
     $("#showAvailableCars").html("")
     $("#showMyCars").html("")
     $.ajax({
-        url:"http://localhost:8080/cars/availableCars",
+        url: "http://localhost:8080/cars/availableCars",
         type: "GET",
         dataType: 'json',
         headers: {
             "Authorization": localStorage.getItem("token")
         }
-    }).done(function(data){
-        global = data;
+    }).done(function (data) {
         createTable(data, "availableCars", "showAvailableCars")
         let table = document.getElementById("availableCars");
-        for(let i=1; i<table.rows.length; i++) {
+        for (let i = 1; i < table.rows.length; i++) {
             let row = table.rows[i];
             let cell = row.insertCell(-1);
-            cell.innerHTML = '<button id="'+data[i-1].id+'" onclick="rentCar('+ data[i-1].id+')">Book Car</button>';
+            cell.innerHTML = '<button id="' + data[i - 1].id + '" onclick="rentCar(' + data[i - 1].id + ')">Book Car</button>';
         }
-    }).fail(function(xhr){
+    }).fail(function (xhr) {
         alert(xhr.responseText);
     })
 }
@@ -179,20 +194,26 @@ function getMyCars() {
     $("#showAvailableCars").html("")
     $("#showMyCars").html("")
     $.ajax({
-        url:"http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars",
-        type:"GET",
+        url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars",
+        type: "GET",
         dataType: 'json',
         headers: {
             Authorization: localStorage.getItem("token")
         }
-    }).done(function(data){
-        if(data.length === 0) {
+    }).done(function (data) {
+        if (data.length === 0) {
             $("#showMyCars").html('<h3>You have no cars rented</h3>')
         } else {
             createTable(data, "myCars", "showMyCars");
+            let table = document.getElementById("myCars");
+            for (let i = 1; i < table.rows.length; i++) {
+                let row = table.rows[i];
+                let cell = row.insertCell(-1);
+                cell.innerHTML = '<button id="' + data[i - 1].id + '" onclick="removeCar(' + data[i - 1].id + ')">Remove Car</button>';
+            }
         }
-    }).fail(function(xhr){
-        alert(xhr.responseText)
+    }).fail(function (xhr) {
+        // alert(xhr.responseText)
     })
 }
 
@@ -207,11 +228,13 @@ function createTable(data, tableId, divId) {
     }
     // CREATE DYNAMIC TABLE.
     var table = document.createElement("table");
+    table.setAttribute("class", "mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp");
     table.setAttribute("id", tableId);
     // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
     var tr = table.insertRow(-1);                   // TABLE ROW.
     for (var i = 0; i < col.length; i++) {
         var th = document.createElement("th");      // TABLE HEADER.
+        th.setAttribute("class", "mdl-data-table__cell--non-numeric");
         th.innerHTML = col[i];
         tr.appendChild(th);
     }
@@ -228,6 +251,7 @@ function createTable(data, tableId, divId) {
     divContainer.innerHTML = "";
     divContainer.appendChild(table);
 }
+
 function logout() {
     localStorage.removeItem("username");
     localStorage.removeItem("userID")
