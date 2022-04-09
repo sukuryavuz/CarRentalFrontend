@@ -1,7 +1,10 @@
 #availableCars, #allCarsId, #myCars {
     margin-left: auto;
     margin-right: auto;
-    padding: 2rem;
-    text-align: center;
-    width:70%;
+}
+nav.mdl-navigation {
+    cursor: pointer;
+}
+button {
+    cursor:pointer;
 }
