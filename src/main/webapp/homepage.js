@@ -148,16 +148,19 @@ function createTable(data, tableId) {
 // Initialize and add the map
 function initMap() {
     $("#content").html('<h3>See our location on the map</h3>');
-    // The location of Uluru
-    const uluru = { lat: 48.15809288969533, lng: 16.382344953755812 };
-    // The map, centered at Uluru
+    // The location of the company
+    const companyLocation = {
+        lat: 48.15809288969533,
+        lng: 16.382344953755812
+    };
+    // The map, centered at companys location
     const map = new google.maps.Map(document.getElementById("map"), {
         zoom: 15,
-        center: uluru,
+        center: companyLocation,
     });
-    // The marker, positioned at Uluru
+    // The marker, positioned at the companys location
     const marker = new google.maps.Marker({
-        position: uluru,
+        position: companyLocation,
         map: map,
     });
 }
