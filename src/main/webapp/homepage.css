@@ -8,3 +8,7 @@ nav.mdl-navigation {
 button {
     cursor:pointer;
 }
+h3 {
+    text-align: center;
+    margin-top: 3rem;
+}

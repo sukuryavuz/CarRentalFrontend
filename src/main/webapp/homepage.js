@@ -28,9 +28,9 @@ function removeCar(carIDremove) {
 }
 
 function getAllCars() {
-    $("#showAllCars").html("")
-    $("#showAvailableCars").html("")
-    $("#showMyCars").html("")
+    // $("#showAllCars").html("")
+    // $("#showAvailableCars").html("")
+    // $("#showMyCars").html("")
     $.ajax({
         url: "http://localhost:8080/cars",
         type: "GET",
@@ -39,16 +39,16 @@ function getAllCars() {
             Authorization: localStorage.getItem("token")
         }
     }).done(function (data) {
-        createTable(data, "allCarsId", "showAllCars");
+        createTable(data, "allCarsId");
     }).fail(function (xhr) {
         alert(xhr.responseText);
     })
 }
 
 function getAvailableCars() {
-    $("#showAllCars").html("")
-    $("#showAvailableCars").html("")
-    $("#showMyCars").html("")
+    // $("#showAllCars").html("")
+    // $("#showAvailableCars").html("")
+    // $("#showMyCars").html("")
     $.ajax({
         url: "http://localhost:8080/cars/availableCars",
         type: "GET",
@@ -57,7 +57,7 @@ function getAvailableCars() {
             "Authorization": localStorage.getItem("token")
         }
     }).done(function (data) {
-        createTable(data, "availableCars", "showAvailableCars")
+        createTable(data, "availableCars")
         let table = document.getElementById("availableCars");
         for (let i = 1; i < table.rows.length; i++) {
             let row = table.rows[i];
@@ -70,9 +70,9 @@ function getAvailableCars() {
 }
 
 function getMyCars() {
-    $("#showAllCars").html("")
-    $("#showAvailableCars").html("")
-    $("#showMyCars").html("")
+    // $("#showAllCars").html("")
+    // $("#showAvailableCars").html("")
+    // $("#showMyCars").html("")
     $.ajax({
         url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars",
         type: "GET",
@@ -82,9 +82,9 @@ function getMyCars() {
         }
     }).done(function (data) {
         if (data.length === 0) {
-            $("#showMyCars").html('<h3>You have no cars rented</h3>')
+            $("#content").html('<h3>You have no cars rented</h3>')
         } else {
-            createTable(data, "myCars", "showMyCars");
+            createTable(data, "myCars");
             let table = document.getElementById("myCars");
             for (let i = 1; i < table.rows.length; i++) {
                 let row = table.rows[i];
@@ -97,7 +97,7 @@ function getMyCars() {
     })
 }
 
-function createTable(data, tableId, divId) {
+function createTable(data, tableId) {
     var col = [];
     for (var i = 0; i < data.length; i++) {
         for (var key in data[i]) {
@@ -127,7 +127,7 @@ function createTable(data, tableId, divId) {
         }
     }
     // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
-    var divContainer = document.getElementById(divId);
+    var divContainer = document.getElementById("content");
     divContainer.innerHTML = "";
     divContainer.appendChild(table);
 }
