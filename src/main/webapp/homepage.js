@@ -28,9 +28,6 @@ function removeCar(carIDremove) {
 }
 
 function getAllCars() {
-    // $("#showAllCars").html("")
-    // $("#showAvailableCars").html("")
-    // $("#showMyCars").html("")
     $.ajax({
         url: "http://localhost:8080/cars",
         type: "GET",
@@ -39,16 +36,17 @@ function getAllCars() {
             Authorization: localStorage.getItem("token")
         }
     }).done(function (data) {
-        createTable(data, "allCarsId");
+        if (data.length === 0) {
+            $("#content").html('<h3>There are currently no cars to show</h3>')
+        } else {
+            createTable(data, "allCarsId");
+        }
     }).fail(function (xhr) {
         alert(xhr.responseText);
     })
 }
 
 function getAvailableCars() {
-    // $("#showAllCars").html("")
-    // $("#showAvailableCars").html("")
-    // $("#showMyCars").html("")
     $.ajax({
         url: "http://localhost:8080/cars/availableCars",
         type: "GET",
@@ -57,12 +55,16 @@ function getAvailableCars() {
             "Authorization": localStorage.getItem("token")
         }
     }).done(function (data) {
-        createTable(data, "availableCars")
-        let table = document.getElementById("availableCars");
-        for (let i = 1; i < table.rows.length; i++) {
-            let row = table.rows[i];
-            let cell = row.insertCell(-1);
-            cell.innerHTML = '<button id="' + data[i - 1].id + '" onclick="rentCar(' + data[i - 1].id + ')">Book Car</button>';
+        if (data.length === 0) {
+            $("#content").html('<h3>There are currently no cars available.</h3>')
+        } else {
+            createTable(data, "availableCars")
+            let table = document.getElementById("availableCars");
+            for (let i = 1; i < table.rows.length; i++) {
+                let row = table.rows[i];
+                let cell = row.insertCell(-1);
+                cell.innerHTML = '<button id="' + data[i - 1].id + '" onclick="rentCar(' + data[i - 1].id + ')">Book Car</button>';
+            }
         }
     }).fail(function (xhr) {
         alert(xhr.responseText);
@@ -70,9 +72,6 @@ function getAvailableCars() {
 }
 
 function getMyCars() {
-    // $("#showAllCars").html("")
-    // $("#showAvailableCars").html("")
-    // $("#showMyCars").html("")
     $.ajax({
         url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars",
         type: "GET",
