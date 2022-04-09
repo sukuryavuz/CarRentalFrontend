@@ -1,7 +1,7 @@
-// $(document).ready(function(){
-//     console.log("userID: " + localStorage.getItem("userID"))
-//     console.log("username: " + localStorage.getItem("username"))
-//     console.log(localStorage.getItem("token"))
+$(document).ready(function(){
+    console.log("userID: " + localStorage.getItem("userID"))
+    console.log("username: " + localStorage.getItem("username"))
+    console.log(localStorage.getItem("token"))
 //     var userID,availableSeats,dayPrice,transmission,carID,carIDrent,carIDremove;
 //     $("#createNewCar").on("click", function(){
 //         availableSeats = $("#availableSeats").val()
@@ -115,7 +115,21 @@
 //             alert(xhr.responseText);
 //         })
 //     });
-// });
+});
+
+function rentCar(carIDrent) {
+    $.ajax({
+        url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars/" + carIDrent,
+        type: "POST",
+        headers: {
+            Authorization: localStorage.getItem("token")
+        }
+    }).done(function () {
+        alert("car with carid: " + carIDrent + "is added to user with userid: " + localStorage.getItem("userID"));
+    }).fail(function (xhr) {
+        alert(xhr.responseText)
+    })
+}
 
 function getAllCars() {
     $("#showAllCars").html("")
@@ -134,7 +148,7 @@ function getAllCars() {
         alert(xhr.responseText);
     })
 }
-
+let global;
 function getAvailableCars() {
     $("#showAllCars").html("")
     $("#showAvailableCars").html("")
@@ -147,7 +161,14 @@ function getAvailableCars() {
             "Authorization": localStorage.getItem("token")
         }
     }).done(function(data){
+        global = data;
         createTable(data, "availableCars", "showAvailableCars")
+        let table = document.getElementById("availableCars");
+        for(let i=1; i<table.rows.length; i++) {
+            let row = table.rows[i];
+            let cell = row.insertCell(-1);
+            cell.innerHTML = '<button id="'+data[i-1].id+'" onclick="rentCar('+ data[i-1].id+')">Book Car</button>';
+        }
     }).fail(function(xhr){
         alert(xhr.responseText);
     })
