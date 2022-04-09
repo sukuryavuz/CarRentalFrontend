@@ -89,7 +89,7 @@ function getMyCars() {
             for (let i = 1; i < table.rows.length; i++) {
                 let row = table.rows[i];
                 let cell = row.insertCell(-1);
-                cell.innerHTML = '<button id="' + data[i - 1].id + '" onclick="removeCar(' + data[i - 1].id + ')">Remove Car</button>';
+                cell.innerHTML = '<button id="' + data[i - 1].id + '" onclick="removeCar(' + data[i - 1].id + ')">Give Car back</button>';
             }
         }
     }).fail(function (xhr) {
