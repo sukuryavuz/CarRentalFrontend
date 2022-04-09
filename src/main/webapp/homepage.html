@@ -4,42 +4,70 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="homepage.js"></script>
     <link rel="stylesheet" href="homepage.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 </head>
 <body>
-<header>
-    <a href="index.html" id="logout" onclick="logout()">Logout</a>
-</header>
-<div id="loggedIn">
-    <div id="divCreateNewCar">
-        available Seats: <input type="number" id="availableSeats">
-        Day Price: <input type="number" id="dayPrice">
-        Transmission: <input type="text" id="transmission">
-        <input type="button" id="createNewCar" name="createNewCar" value="createNewCar">
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <!-- Title -->
+            <span class="mdl-layout-title">Car Rental</span>
+            <!-- Add spacer, to align navigation to the right -->
+            <div class="mdl-layout-spacer"></div>
+            <!-- Navigation. We hide it in small screens. -->
+            <nav class="mdl-navigation mdl-layout--large-screen-only">
+                <a class="mdl-navigation__link" id="logout" href="index.html" onclick="logout()">Logout</a>
+            </nav>
+        </div>
+    </header>
+    <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Car Rental</span>
+        <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" onclick="getAllCars()">All Cars</a>
+            <a class="mdl-navigation__link" onclick="getAvailableCars()">Available Cars</a>
+            <a class="mdl-navigation__link" onclick="getMyCars()">My Cars</a>
+        </nav>
     </div>
-    <div id="divGetAllCars">
-        <input type="button" id="getAllCars" name="getAllCars" value="getAllCars">
-        <p id="showAllCars"></p>
-    </div>
-    <div id="divGetCar">
-        Car-ID: <input type="number" id="carID">
-        <input type="button" id="getCar" name="getCar" value="getCar">
-    </div>
-    <div id="divAddCarToUser">
-        Car-ID of the Car you want to rent: <input type="number" id="carIDrent">
-        <input type="button" id="addCarToUser" name="addCarToUser" value="addCarToUser">
-    </div>
-    <div id="divRemoveCarFromUser">
-        CAR-ID of the Car you want to give back: <input type="number" id="carIDremove">
-        <input type="button" id="removeCarFromUser" name="removeCarFromUser" value="removeCarFromUser">
-    </div>
-    <div id="divGetAvailableCars">
-        <input type="button" id="getAvailableCars" value="get Available Cars">
-        <p id="showAvailableCars"></p>
-    </div>
-    <div id="divGetCars">
-        <input type="button" id="getCars" value="get my Cars">
-        <p id="showMyCars"></p>
-    </div>
+    <main class="mdl-layout__content">
+        <div class="page-content" id="content">
+            <!-- Your content goes here -->
+<!--            <div id="loggedIn">-->
+<!--                <div id="divCreateNewCar">-->
+<!--                    available Seats: <input type="number" id="availableSeats">-->
+<!--                    Day Price: <input type="number" id="dayPrice">-->
+<!--                    Transmission: <input type="text" id="transmission">-->
+<!--                    <input type="button" id="createNewCar" name="createNewCar" value="createNewCar">-->
+<!--                </div>-->
+<!--                <div id="divGetAllCars">-->
+<!--                    <input type="button" id="getAllCars" name="getAllCars" value="getAllCars">-->
+                    <p id="showAllCars"></p>
+<!--                </div>-->
+<!--                <div id="divGetCar">-->
+<!--                    Car-ID: <input type="number" id="carID">-->
+<!--                    <input type="button" id="getCar" name="getCar" value="getCar">-->
+<!--                </div>-->
+<!--                <div id="divAddCarToUser">-->
+<!--                    Car-ID of the Car you want to rent: <input type="number" id="carIDrent">-->
+<!--                    <input type="button" id="addCarToUser" name="addCarToUser" value="addCarToUser">-->
+<!--                </div>-->
+<!--                <div id="divRemoveCarFromUser">-->
+<!--                    CAR-ID of the Car you want to give back: <input type="number" id="carIDremove">-->
+<!--                    <input type="button" id="removeCarFromUser" name="removeCarFromUser" value="removeCarFromUser">-->
+<!--                </div>-->
+<!--                <div id="divGetAvailableCars">-->
+<!--                    <input type="button" id="getAvailableCars" value="get Available Cars">-->
+                    <p id="showAvailableCars"></p>
+<!--                </div>-->
+<!--                <div id="divGetCars">-->
+<!--                    <input type="button" id="getCars" value="get my Cars">-->
+                    <p id="showMyCars"></p>
+<!--                </div>-->
+<!--            </div>-->
+        </div>
+    </main>
 </div>
 </body>
 </html>
