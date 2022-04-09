@@ -94,7 +94,7 @@ function getMyCars() {
             }
         }
     }).fail(function (xhr) {
-        // alert(xhr.responseText)
+        alert(xhr.responseText)
     })
 }
 
