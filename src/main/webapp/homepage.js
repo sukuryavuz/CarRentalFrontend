@@ -5,31 +5,37 @@ $(document).ready(function () {
 });
 // @param carIDrent: ID of the car to be rented
 function rentCar(carIDrent) {
-    $.ajax({
-        url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars/" + carIDrent,
-        type: "POST",
-        headers: {
-            Authorization: localStorage.getItem("token")
-        }
-    }).done(function () {
-        getAvailableCars();
-    }).fail(function (xhr) {
-        alert(xhr.responseText)
-    })
+    let text = "Do you want to rent the Car with ID: " + carIDrent +"?"
+    if(confirm(text) === true) {
+        $.ajax({
+            url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars/" + carIDrent,
+            type: "POST",
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        }).done(function () {
+            getAvailableCars();
+        }).fail(function (xhr) {
+            alert(xhr.responseText)
+        })
+    }
 }
 // give Car back
 function removeCar(carIDremove) {
-    $.ajax({
-        url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars/" + carIDremove,
-        type: "DELETE",
-        headers: {
-            Authorization: localStorage.getItem("token")
-        }
-    }).done(function () {
-        getMyCars();
-    }).fail(function (xhr) {
-        alert(xhr.responseText);
-    })
+    let text = "Do you want to give the Car with ID: " + carIDremove + " back?"
+    if(confirm(text) === true) {
+        $.ajax({
+            url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars/" + carIDremove,
+            type: "DELETE",
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        }).done(function () {
+            getMyCars();
+        }).fail(function (xhr) {
+            alert(xhr.responseText);
+        })
+    }
 }
 
 function getAllCars() {
