@@ -78,3 +78,6 @@ body {
     color: #fff!important;
     border: #fff!important;
 }
+input[type="submit"], input[type="button"] {
+    cursor: pointer;
+}
