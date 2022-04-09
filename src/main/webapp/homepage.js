@@ -1,3 +1,8 @@
+$(document).ready(function () {
+    console.log("userID: " + localStorage.getItem("userID"))
+    console.log("username: " + localStorage.getItem("username"))
+    console.log(localStorage.getItem("token"))
+});
 // @param carIDrent: ID of the car to be rented
 function rentCar(carIDrent) {
     $.ajax({
@@ -136,33 +141,3 @@ function logout() {
     localStorage.removeItem("userID")
     localStorage.removeItem("token")
 }
-
-$(document).ready(function () {
-    console.log("userID: " + localStorage.getItem("userID"))
-    console.log("username: " + localStorage.getItem("username"))
-    console.log(localStorage.getItem("token"))
-/*    $("#createNewCar").on("click", function(){
-        availableSeats = $("#availableSeats").val()
-        dayPrice = $("#dayPrice").val()
-        transmission = $("#transmission").val()
-        $.ajax({
-            url:"http://localhost:8080/cars",
-            type: "POST",
-            contentType: 'application/json',
-            dataType: 'json',
-            headers: {
-                Authorization: localStorage.getItem("token")
-            },
-            data: JSON.stringify({
-                "availableSeats": availableSeats,
-                "dayPrice": dayPrice,
-                "transmission": transmission
-            })
-        }).done(function(){
-            alert("success");
-        }).fail(function(xhr) {
-            alert(xhr.responseText);
-        });
-    });
-*/
-});
