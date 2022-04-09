@@ -166,7 +166,7 @@ function getMyCars() {
         }
     }).done(function(data){
         if(data.length === 0) {
-            $("#content").html('<h3>You have no cars rented</h3>')
+            $("#showMyCars").html('<h3>You have no cars rented</h3>')
         } else {
             createTable(data, "myCars", "showMyCars");
         }
