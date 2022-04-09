@@ -22,14 +22,20 @@
     <div class="mdl-layout__drawer">
         <span class="mdl-layout-title">Car Rental</span>
         <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" onclick="initMap()">Location</a>
             <a class="mdl-navigation__link" onclick="getAllCars()">All Cars</a>
             <a class="mdl-navigation__link" onclick="getAvailableCars()">Available Cars</a>
             <a class="mdl-navigation__link" onclick="getMyCars()">My Cars</a>
         </nav>
     </div>
     <main class="mdl-layout__content">
-        <div class="page-content" id="content">
-        </div>
+        <div class="page-content" id="content"></div>
+        <div id="map"></div>
+        <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+        <script
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0q343ZoM9SnEKOhIAo-CV0Uxsp59-B3k&callback=initMap&v=weekly"
+                async
+        ></script>
     </main>
 </div>
 </body>

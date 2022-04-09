@@ -33,6 +33,7 @@ function removeCar(carIDremove) {
 }
 
 function getAllCars() {
+    $("#map").html('');
     $.ajax({
         url: "http://localhost:8080/cars",
         type: "GET",
@@ -52,6 +53,7 @@ function getAllCars() {
 }
 
 function getAvailableCars() {
+    $("#map").html('');
     $.ajax({
         url: "http://localhost:8080/cars/availableCars",
         type: "GET",
@@ -77,6 +79,7 @@ function getAvailableCars() {
 }
 
 function getMyCars() {
+    $("#map").html('');
     $.ajax({
         url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars",
         type: "GET",
@@ -134,6 +137,23 @@ function createTable(data, tableId) {
     var divContainer = document.getElementById("content");
     divContainer.innerHTML = "";
     divContainer.appendChild(table);
+}
+
+// Initialize and add the map
+function initMap() {
+    $("#content").html('<h3>See our location on the map</h3>');
+    // The location of Uluru
+    const uluru = { lat: 48.15809288969533, lng: 16.382344953755812 };
+    // The map, centered at Uluru
+    const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 15,
+        center: uluru,
+    });
+    // The marker, positioned at Uluru
+    const marker = new google.maps.Marker({
+        position: uluru,
+        map: map,
+    });
 }
 
 function logout() {
