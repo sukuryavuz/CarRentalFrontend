@@ -45,7 +45,6 @@ function saveData(){
             "password": password
         })
     }).done(function (responseJSON) {
-        console.log("done wird ausgeführt")
         let userID = responseJSON.userId;
         let jwtToken = responseJSON.jwtToken;
         localStorage.setItem("userID", userID);
@@ -57,5 +56,6 @@ function saveData(){
         alert(xhr.responseText);
         $("#username").val('')
         $("#password").val('')
+        $("#login").attr("action", "")
     });
 }
