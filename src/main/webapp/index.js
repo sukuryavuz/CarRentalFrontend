@@ -4,25 +4,31 @@ $(document).ready(function() {
     $("#register").on("click", function () {
         username = $("#username").val()
         password = $("#password").val()
-        $.ajax({
-            url: "http://localhost:8080/register",
-            type: "POST",
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify({
-                "username": username,
-                "password": password
+        if(username.length < 5 || password.length < 5) {
+            alert("invalid Input. Username and Password must contain at least 5 characters.")
+            $("#username").val("")
+            $("#password").val("")
+        } else {
+            $.ajax({
+                url: "http://localhost:8080/register",
+                type: "POST",
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({
+                    "username": username,
+                    "password": password
+                })
+            }).done(function (responseJSON) {
+                userID = responseJSON.id
+                alert(userID + " registriert")
+                $("#username").val('')
+                $("#password").val('')
+            }).fail(function (xhr) {
+                alert(xhr.responseText);
+                $("#username").val('')
+                $("#password").val('')
             })
-        }).done(function (responseJSON) {
-            userID = responseJSON.id
-            alert(userID + " registriert")
-            $("#username").val('')
-            $("#password").val('')
-        }).fail(function (xhr) {
-            alert(xhr.responseText);
-            $("#username").val('')
-            $("#password").val('')
-        })
+        }
     });
 })
 function saveData(){
