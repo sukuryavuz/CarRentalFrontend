@@ -82,10 +82,75 @@ function getAvailableCars() {
                 let cell = row.insertCell(-1);
                 cell.innerHTML = '<button id="' + data[i - 1].id + '" onclick="rentCar(' + data[i - 1].id + ')">Rent Car</button>';
             }
-            createDropDownWithCurrencies("availableCars")
+            createDropDownWithCurrencies("availableCars");
+            if(selectedCurrency !== "USD") {
+                convertCurrency(selectedCurrency);
+            }
+            $("select option[value='"+selectedCurrency+"']").attr("selected","selected")
         }
     }).fail(function (xhr) {
         alert(xhr.responseText);
+    })
+}
+
+function createDropDownWithCurrencies(table) {
+    $("#" + table + " tr th:last-child").after(
+        "<select name='currency' id='currency'>" +
+        "<option value='USD'>USD</option>" +
+        "<option value='JPY'>JPY</option>" +
+        "<option value='BGN'>BGN</option>" +
+        "<option value='CZK'>CZK</option>" +
+        "<option value='DKK'>DKK</option>" +
+        "<option value='GBP'>GBP</option>" +
+        "<option value='HUF'>HUF</option>" +
+        "<option value='PLN'>PLN</option>" +
+        "<option value='RUN'>RUN</option>" +
+        "<option value='SEK'>SEK</option>" +
+        "<option value='CHF'>CHF</option>" +
+        "<option value='ISK'>ISK</option>" +
+        "<option value='NOK'>NOK</option>" +
+        "<option value='HRK'>HRK</option>" +
+        "<option value='TRY'>TRY</option>" +
+        "<option value='AUD'>AUD</option>" +
+        "<option value='BRL'>BRL</option>" +
+        "<option value='CAD'>CAD</option>" +
+        "<option value='CNY'>CNY</option>" +
+        "<option value='HKD'>HKD</option>" +
+        "<option value='IDR'>IDR</option>" +
+        "<option value='ILS'>ILS</option>" +
+        "<option value='INR'>INR</option>" +
+        "<option value='KRW'>KRW</option>" +
+        "<option value='MXN'>MXN</option>" +
+        "<option value='NYR'>NYR</option>" +
+        "<option value='NZD'>NZD</option>" +
+        "<option value='PHP'>PHP</option>" +
+        "<option value='SGD'>SGD</option>" +
+        "<option value='THB'>THB</option>" +
+        "<option value='ZAR'>ZAR</option>" +
+        "</select>")
+    $("#currency").on("change", function () {
+        selectedCurrency = $("#currency").find(":selected").text();
+        convertCurrency(selectedCurrency);
+    })
+}
+
+let selectedCurrency = "USD";
+
+function convertCurrency(currency) {
+    $.ajax({
+        url: "http://localhost:8080/converter/cars/" + currency,
+        type: "POST",
+        dataType: "json",
+        headers: {
+            Authorization: localStorage.getItem("token")
+        }
+    }).done(function (data) {
+        let table = document.getElementById("availableCars");
+        for(let i=1; i<table.rows.length; i++) {
+            table.rows[i].cells[3].innerHTML = data[i-1].toFixed(2);
+        }
+    }).fail(function (xhr) {
+        alert(xhr.responseText)
     })
 }
 
@@ -169,65 +234,6 @@ function initMap() {
         position: companyLocation,
         map: map,
     });
-}
-
-function createDropDownWithCurrencies(table) {
-    $("#" + table + " tr th:last-child").after(
-        "<select name='currency' id='currency'>" +
-        "<option value='usd'>USD</option>" +
-        "<option value='jpy'>JPY</option>" +
-        "<option value='bgn'>BGN</option>" +
-        "<option value='czk'>CZK</option>" +
-        "<option value='dkk'>DKK</option>" +
-        "<option value='gbp'>GBP</option>" +
-        "<option value='huf'>HUF</option>" +
-        "<option value='pln'>PLN</option>" +
-        "<option value='run'>RUN</option>" +
-        "<option value='sek'>SEK</option>" +
-        "<option value='chf'>CHF</option>" +
-        "<option value='isk'>ISK</option>" +
-        "<option value='nok'>NOK</option>" +
-        "<option value='hrk'>HRK</option>" +
-        "<option value='try'>TRY</option>" +
-        "<option value='aud'>AUD</option>" +
-        "<option value='brl'>BRL</option>" +
-        "<option value='cad'>CAD</option>" +
-        "<option value='cny'>CNY</option>" +
-        "<option value='hkd'>HKD</option>" +
-        "<option value='idr'>IDR</option>" +
-        "<option value='ils'>ILS</option>" +
-        "<option value='inr'>INR</option>" +
-        "<option value='krw'>KRW</option>" +
-        "<option value='mxn'>MXN</option>" +
-        "<option value='nyr'>NYR</option>" +
-        "<option value='nzd'>NZD</option>" +
-        "<option value='php'>PHP</option>" +
-        "<option value='sgd'>SGD</option>" +
-        "<option value='thb'>THB</option>" +
-        "<option value='zar'>ZAR</option>" +
-        "</select>")
-    $("#currency").on("change", function () {
-        convertCurrency();
-    })
-}
-
-function convertCurrency() {
-    let selectedCurrency = $("#currency").find(":selected").text();
-    $.ajax({
-        url: "http://localhost:8080/converter/cars/" + selectedCurrency,
-        type: "POST",
-        dataType: "json",
-        headers: {
-            Authorization: localStorage.getItem("token")
-        }
-    }).done(function (data) {
-        let table = document.getElementById("availableCars");
-        for(let i=1; i<table.rows.length; i++) {
-            table.rows[i].cells[3].innerHTML = data[i-1].toFixed(2);
-        }
-    }).fail(function (xhr) {
-        alert(xhr.responseText)
-    })
 }
 
 function logout() {
