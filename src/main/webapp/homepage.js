@@ -74,23 +74,27 @@ function getAvailableCars() {
         if (data.length === 0) {
             $("#content").html('<h3>There are currently no cars available.</h3>')
         } else {
-            createTable(data, "availableCars")
-            $("#availableCars").before("<h3>All currently available cars</h3>")
-            let table = document.getElementById("availableCars");
-            for (let i = 1; i < table.rows.length; i++) {
-                let row = table.rows[i];
-                let cell = row.insertCell(-1);
-                cell.innerHTML = '<button id="' + data[i - 1].id + '" onclick="rentCar(' + data[i - 1].id + ')">Rent Car</button>';
-            }
-            createDropDownWithCurrencies("availableCars");
             if(selectedCurrency !== "USD") {
-                convertCurrency(selectedCurrency);
+                convertCurrency(selectedCurrency,"availableCars");
+            } else{
+                createTable(data, "availableCars")
+                let table = document.getElementById("availableCars");
+                addRentCarButtons(table, data);
+                createDropDownWithCurrencies("availableCars");
+                $("select option[value='"+selectedCurrency+"']").attr("selected","selected")
             }
-            $("select option[value='"+selectedCurrency+"']").attr("selected","selected")
         }
     }).fail(function (xhr) {
         alert(xhr.responseText);
     })
+}
+
+function addRentCarButtons(table, data) {
+    for (let i = 1; i < table.rows.length; i++) {
+        let row = table.rows[i];
+        let cell = row.insertCell(-1);
+        cell.innerHTML = '<button id="' + data[i - 1].id + '" onclick="rentCar(' + data[i - 1].id + ')">Rent Car</button>';
+    }
 }
 
 function createDropDownWithCurrencies(table) {
@@ -130,13 +134,13 @@ function createDropDownWithCurrencies(table) {
         "</select>")
     $("#currency").on("change", function () {
         selectedCurrency = $("#currency").find(":selected").text();
-        convertCurrency(selectedCurrency);
+        getAvailableCars();
     })
 }
 
 let selectedCurrency = "USD";
 
-function convertCurrency(currency) {
+function convertCurrency(currency, tableId) {
     $.ajax({
         url: "http://localhost:8080/converter/cars/" + currency,
         type: "POST",
@@ -145,10 +149,14 @@ function convertCurrency(currency) {
             Authorization: localStorage.getItem("token")
         }
     }).done(function (data) {
+        // for(let i=1; i<table.rows.length; i++) {
+        //     table.rows[i].cells[3].innerHTML = data[i-1].toFixed(2);
+        // }
+        createTable(data, tableId);
         let table = document.getElementById("availableCars");
-        for(let i=1; i<table.rows.length; i++) {
-            table.rows[i].cells[3].innerHTML = data[i-1].toFixed(2);
-        }
+        addRentCarButtons(table, data);
+        createDropDownWithCurrencies("availableCars");
+        $("select option[value='"+selectedCurrency+"']").attr("selected","selected")
     }).fail(function (xhr) {
         alert(xhr.responseText)
     })
