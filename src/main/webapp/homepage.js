@@ -205,9 +205,8 @@ function createDropDownWithCurrencies(table){
             "<option value='thb'>THB</option>" +
             "<option value='zar'>ZAR</option>" +
         "</select>")
+    $("#currency").on("change", convertCurrency())
 }
-
-$("#currency").on("change", convertCurrency())
 
 function convertCurrency(){
     let selectedCurrency = $("#currency").find(":selected").text()
