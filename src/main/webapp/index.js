@@ -4,7 +4,7 @@ $(document).ready(function() {
     $("#register").on("click", function () {
         username = $("#username").val()
         password = $("#password").val()
-        if(username.length < 5 && password.length < 5) {
+        if(username.length < 5 || password.length < 5) {
             alert("invalid Input. Username and Password must contain at least 5 characters.")
             $("#username").val("")
             $("#password").val("")
