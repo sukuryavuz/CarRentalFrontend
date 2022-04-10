@@ -51,7 +51,6 @@ function saveData(){
         localStorage.setItem("userID", userID);
         localStorage.setItem("username", username)
         localStorage.setItem("token", "Bearer " + jwtToken);
-        alert("User: " + username + " mit der userID: " + userID + " ist eingelogged.");
         console.log("Token: " + jwtToken)
         //alert(responseJSON[0].id);
     }).fail(function (xhr) {
