@@ -221,7 +221,10 @@ function convertCurrency() {
             Authorization: localStorage.getItem("token")
         }
     }).done(function (data) {
-        alert("done");
+        let table = document.getElementById("availableCars");
+        for(let i=1; i<table.rows.length; i++) {
+            table.rows[i].cells[3].innerHTML = data[i-1].toFixed(2);
+        }
     }).fail(function (xhr) {
         alert(xhr.responseText)
     })
