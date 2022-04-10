@@ -52,6 +52,7 @@ function getAllCars() {
             $("#content").html('<h3>There are currently no cars to show</h3>')
         } else {
             createTable(data, "allCarsId");
+            $("#allCarsId").before("<h3>All of our cars</h3>")
         }
     }).fail(function (xhr) {
         alert(xhr.responseText);
@@ -72,6 +73,7 @@ function getAvailableCars() {
             $("#content").html('<h3>There are currently no cars available.</h3>')
         } else {
             createTable(data, "availableCars")
+            $("#availableCars").before("<h3>All currently available cars</h3>")
             let table = document.getElementById("availableCars");
             for (let i = 1; i < table.rows.length; i++) {
                 let row = table.rows[i];
@@ -98,6 +100,7 @@ function getMyCars() {
             $("#content").html('<h3>You have no cars rented</h3>')
         } else {
             createTable(data, "myCars");
+            $("#myCars").before("<h3>Your currently rented cars</h3>")
             let table = document.getElementById("myCars");
             for (let i = 1; i < table.rows.length; i++) {
                 let row = table.rows[i];
