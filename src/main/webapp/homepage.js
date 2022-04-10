@@ -3,10 +3,11 @@ $(document).ready(function () {
     console.log("username: " + localStorage.getItem("username"))
     console.log(localStorage.getItem("token"))
 });
+
 // @param carIDrent: ID of the car to be rented
 function rentCar(carIDrent) {
-    let text = "Do you want to rent the Car with ID: " + carIDrent +"?"
-    if(confirm(text) === true) {
+    let text = "Do you want to rent the Car with ID: " + carIDrent + "?"
+    if (confirm(text) === true) {
         $.ajax({
             url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars/" + carIDrent,
             type: "POST",
@@ -20,10 +21,11 @@ function rentCar(carIDrent) {
         })
     }
 }
+
 // give Car back
 function removeCar(carIDremove) {
     let text = "Do you want to give the Car with ID: " + carIDremove + " back?"
-    if(confirm(text) === true) {
+    if (confirm(text) === true) {
         $.ajax({
             url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars/" + carIDremove,
             type: "DELETE",
@@ -169,65 +171,57 @@ function initMap() {
     });
 }
 
-function createDropDownWithCurrencies(table){
+function createDropDownWithCurrencies(table) {
     $("#" + table + " tr th:last-child").after(
         "<select name='currency' id='currency'>" +
-            "<option selected disabled value='chooseCurrency'>choose Currency</option>" +
-            "<option value='usd'>USD</option>" +
-            "<option value='jpy'>JPY</option>" +
-            "<option value='bgn'>BGN</option>" +
-            "<option value='czk'>CZK</option>" +
-            "<option value='dkk'>DKK</option>" +
-            "<option value='gbp'>GBP</option>" +
-            "<option value='huf'>HUF</option>" +
-            "<option value='pln'>PLN</option>" +
-            "<option value='run'>RUN</option>" +
-            "<option value='sek'>SEK</option>" +
-            "<option value='chf'>CHF</option>" +
-            "<option value='isk'>ISK</option>" +
-            "<option value='nok'>NOK</option>" +
-            "<option value='hrk'>HRK</option>" +
-            "<option value='try'>TRY</option>" +
-            "<option value='aud'>AUD</option>" +
-            "<option value='brl'>BRL</option>" +
-            "<option value='cad'>CAD</option>" +
-            "<option value='cny'>CNY</option>" +
-            "<option value='hkd'>HKD</option>" +
-            "<option value='idr'>IDR</option>" +
-            "<option value='ils'>ILS</option>" +
-            "<option value='inr'>INR</option>" +
-            "<option value='krw'>KRW</option>" +
-            "<option value='mxn'>MXN</option>" +
-            "<option value='nyr'>NYR</option>" +
-            "<option value='nzd'>NZD</option>" +
-            "<option value='php'>PHP</option>" +
-            "<option value='sgd'>SGD</option>" +
-            "<option value='thb'>THB</option>" +
-            "<option value='zar'>ZAR</option>" +
+        "<option value='usd'>USD</option>" +
+        "<option value='jpy'>JPY</option>" +
+        "<option value='bgn'>BGN</option>" +
+        "<option value='czk'>CZK</option>" +
+        "<option value='dkk'>DKK</option>" +
+        "<option value='gbp'>GBP</option>" +
+        "<option value='huf'>HUF</option>" +
+        "<option value='pln'>PLN</option>" +
+        "<option value='run'>RUN</option>" +
+        "<option value='sek'>SEK</option>" +
+        "<option value='chf'>CHF</option>" +
+        "<option value='isk'>ISK</option>" +
+        "<option value='nok'>NOK</option>" +
+        "<option value='hrk'>HRK</option>" +
+        "<option value='try'>TRY</option>" +
+        "<option value='aud'>AUD</option>" +
+        "<option value='brl'>BRL</option>" +
+        "<option value='cad'>CAD</option>" +
+        "<option value='cny'>CNY</option>" +
+        "<option value='hkd'>HKD</option>" +
+        "<option value='idr'>IDR</option>" +
+        "<option value='ils'>ILS</option>" +
+        "<option value='inr'>INR</option>" +
+        "<option value='krw'>KRW</option>" +
+        "<option value='mxn'>MXN</option>" +
+        "<option value='nyr'>NYR</option>" +
+        "<option value='nzd'>NZD</option>" +
+        "<option value='php'>PHP</option>" +
+        "<option value='sgd'>SGD</option>" +
+        "<option value='thb'>THB</option>" +
+        "<option value='zar'>ZAR</option>" +
         "</select>")
-    $("#currency").on("change", convertCurrency())
+    $("#currency").on("change", function () {
+        convertCurrency();
+    })
 }
 
-function convertCurrency(){
-    let selectedCurrency = $("#currency").find(":selected").text()
+function convertCurrency() {
+    let selectedCurrency = $("#currency").find(":selected").text();
     $.ajax({
         url: "http://localhost:8080/converter/cars/" + selectedCurrency,
         type: "POST",
+        dataType: "json",
         headers: {
             Authorization: localStorage.getItem("token")
         }
     }).done(function (data) {
-        if (data.length === 0) {
-            $("#content").html('<h3>There are no available Cars.</h3>')
-        } else {
-            createTable(data, "convertedCars");
-            let table = document.getElementById("convertedCars");
-            for (let i = 1; i < table.rows.length; i++) {
-                let row = table.rows[i];
-                let cell = row.insertCell(-1);
-                cell.innerHTML = '<button id="' + data[i - 1].id + '" onclick="rentCar(' + data[i - 1].id + ')">Rent Car</button>';
-            }
-        }
+        alert("done");
     }).fail(function (xhr) {
         alert(xhr.responseText)
     })
@@ -242,6 +236,7 @@ function logout() {
 function preventBack() {
     window.history.forward();
 }
+
 setTimeout("preventBack()", 0);
 
 window.onunload = function () {
