@@ -4,42 +4,6 @@ $(document).ready(function () {
     console.log(localStorage.getItem("token"))
 });
 
-// @param carIDrent: ID of the car to be rented
-function rentCar(carIDrent) {
-    let text = "Do you want to rent the Car with ID: " + carIDrent + "?"
-    if (confirm(text) === true) {
-        $.ajax({
-            url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars/" + carIDrent,
-            type: "POST",
-            headers: {
-                Authorization: localStorage.getItem("token")
-            }
-        }).done(function () {
-            getAvailableCars();
-        }).fail(function (xhr) {
-            alert(xhr.responseText)
-        })
-    }
-}
-
-// give Car back
-function removeCar(carIDremove) {
-    let text = "Do you want to give the Car with ID: " + carIDremove + " back?"
-    if (confirm(text) === true) {
-        $.ajax({
-            url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars/" + carIDremove,
-            type: "DELETE",
-            headers: {
-                Authorization: localStorage.getItem("token")
-            }
-        }).done(function () {
-            getMyCars();
-        }).fail(function (xhr) {
-            alert(xhr.responseText);
-        })
-    }
-}
-
 function getAllCars() {
     $("#map").html('');
     $.ajax({
@@ -87,6 +51,65 @@ function getAvailableCars() {
     }).fail(function (xhr) {
         alert(xhr.responseText);
     })
+}
+
+// @param carIDrent: ID of the car to be rented
+function rentCar(carIDrent) {
+    let text = "Do you want to rent the Car with ID: " + carIDrent + "?"
+    if (confirm(text) === true) {
+        $.ajax({
+            url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars/" + carIDrent,
+            type: "POST",
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        }).done(function () {
+            getAvailableCars();
+        }).fail(function (xhr) {
+            alert(xhr.responseText)
+        })
+    }
+}
+
+function getMyCars() {
+    $("#map").html('');
+    $.ajax({
+        url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars",
+        type: "GET",
+        dataType: 'json',
+        headers: {
+            Authorization: localStorage.getItem("token")
+        }
+    }).done(function (data) {
+        if (data.length === 0) {
+            $("#content").html('<h3>You have no cars rented</h3>')
+        } else {
+            createTable(data, "myCars");
+            $("#myCars").before("<h3>Your currently rented cars</h3>")
+            let table = document.getElementById("myCars");
+            addRentOrRemoveButtons(table, data, "remove");
+        }
+    }).fail(function (xhr) {
+        alert(xhr.responseText)
+    })
+}
+
+// give Car back
+function removeCar(carIDremove) {
+    let text = "Do you want to give the Car with ID: " + carIDremove + " back?"
+    if (confirm(text) === true) {
+        $.ajax({
+            url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars/" + carIDremove,
+            type: "DELETE",
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        }).done(function () {
+            getMyCars();
+        }).fail(function (xhr) {
+            alert(xhr.responseText);
+        })
+    }
 }
 
 function addRentOrRemoveButtons(table, data, rentOrRemove) {
@@ -156,29 +179,6 @@ function convertCurrency(currency, response) {
     }).done(function (data) {
         for(let i=0; i<response.length; i++) {
             response[i].dayPrice = data[i];
-        }
-    }).fail(function (xhr) {
-        alert(xhr.responseText)
-    })
-}
-
-function getMyCars() {
-    $("#map").html('');
-    $.ajax({
-        url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars",
-        type: "GET",
-        dataType: 'json',
-        headers: {
-            Authorization: localStorage.getItem("token")
-        }
-    }).done(function (data) {
-        if (data.length === 0) {
-            $("#content").html('<h3>You have no cars rented</h3>')
-        } else {
-            createTable(data, "myCars");
-            $("#myCars").before("<h3>Your currently rented cars</h3>")
-            let table = document.getElementById("myCars");
-            addRentOrRemoveButtons(table, data, "remove");
         }
     }).fail(function (xhr) {
         alert(xhr.responseText)
