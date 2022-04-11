@@ -5,7 +5,7 @@ $(document).ready(function () {
 });
 
 function getAllCars() {
-    $("#map").html('');
+    $("#map").css("display", "none");
     $.ajax({
         url: "http://localhost:8080/cars",
         type: "GET",
@@ -32,7 +32,7 @@ function getAllCars() {
 }
 
 function getAvailableCars() {
-    $("#map").html('');
+    $("#map").css("display", "none");
     $.ajax({
         url: "http://localhost:8080/cars/availableCars",
         type: "GET",
@@ -79,7 +79,7 @@ function rentCar(carIDrent) {
 }
 
 function getMyCars() {
-    $("#map").html('');
+    $("#map").css("display", "none");
     $.ajax({
         url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars",
         type: "GET",
