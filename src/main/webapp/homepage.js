@@ -4,11 +4,21 @@ $(document).ready(function () {
     console.log(localStorage.getItem("token"))
 });
 
+let selectedCurrency = "USD";
+
 function getAllCars() {
     $("#map").css("display", "none");
+    let url, type;
+    if(selectedCurrency === "USD") {
+        url = "http://localhost:8080/cars";
+        type = "GET";
+    } else {
+        url = "http://localhost:8080/converter/cars/" + selectedCurrency;
+        type = "POST"
+    }
     $.ajax({
-        url: "http://localhost:8080/cars",
-        type: "GET",
+        url: url,
+        type: type,
         dataType: 'json',
         headers: {
             Authorization: localStorage.getItem("token")
@@ -17,10 +27,6 @@ function getAllCars() {
         if (data.length === 0) {
             $("#content").html('<h3>There are currently no cars to show</h3>')
         } else {
-            if(selectedCurrency !== "USD") {
-                let url = "http://localhost:8080/converter/cars/" + selectedCurrency;
-                convertCurrency(url, data);
-            }
             createTable(data, "allCarsId");
             $("#allCarsId").before("<h3>All of our cars</h3>")
             createDropDownWithCurrencies("allCarsId", "currencyAllCars", getAllCars);
@@ -33,9 +39,17 @@ function getAllCars() {
 
 function getAvailableCars() {
     $("#map").css("display", "none");
+    let url, type;
+    if(selectedCurrency === "USD") {
+        url = "http://localhost:8080/cars/availableCars";
+        type = "GET";
+    } else {
+        url = "http://localhost:8080/converter/cars/availableCars/" + selectedCurrency;
+        type = "POST";
+    }
     $.ajax({
-        url: "http://localhost:8080/cars/availableCars",
-        type: "GET",
+        url: url,
+        type: type,
         dataType: 'json',
         headers: {
             "Authorization": localStorage.getItem("token")
@@ -44,10 +58,6 @@ function getAvailableCars() {
         if (data.length === 0) {
             $("#content").html('<h3>There are currently no cars available.</h3>')
         } else {
-            if(selectedCurrency !== "USD") {
-                let url = "http://localhost:8080/converter/cars/availableCars/" + selectedCurrency;
-                convertCurrency(url, data);
-            }
             createTable(data, "availableCars")
             $("#availableCars").before("<h3>Available Cars</h3>")
             let table = document.getElementById("availableCars");
@@ -80,9 +90,17 @@ function rentCar(carIDrent) {
 
 function getMyCars() {
     $("#map").css("display", "none");
+    let url, type;
+    if(selectedCurrency === "USD") {
+        url = "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars";
+        type = "GET";
+    } else {
+        url = "http://localhost:8080/converter/users/" + localStorage.getItem("userID") + "/cars/" + selectedCurrency;
+        type = "POST";
+    }
     $.ajax({
-        url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars",
-        type: "GET",
+        url: url,
+        type: type,
         dataType: 'json',
         headers: {
             Authorization: localStorage.getItem("token")
@@ -91,10 +109,6 @@ function getMyCars() {
         if (data.length === 0) {
             $("#content").html('<h3>You have no cars rented</h3>')
         } else {
-            if(selectedCurrency !== "USD") {
-                let url = "http://localhost:8080/converter/users/" + localStorage.getItem("userID") + "/cars/" + selectedCurrency;
-                convertCurrency(url, data);
-            }
             createTable(data, "myCars");
             $("#myCars").before("<h3>Your currently rented cars</h3>")
             let table = document.getElementById("myCars");
@@ -178,30 +192,6 @@ function createDropDownWithCurrencies(table, selectionId, callback) {
     })
 }
 
-let selectedCurrency = "USD";
-
-function convertCurrency(url, response) {
-    $.ajax({
-        url: url,
-        type: "POST",
-        dataType: "json",
-        async: false,
-        headers: {
-            Authorization: localStorage.getItem("token")
-        }
-    }).done(function (data) {
-        for(let i=0; i<response.length; i++) {
-            response[i].dayPrice = data[i].toFixed(2);
-        }
-    }).fail(function (xhr) {
-        if (xhr.status === 500) {
-            alert("Currency Converter is currently not available. Please try later again.")
-        } else {
-            alert(xhr.responseText)
-        }
-    })
-}
-
 function createTable(data, tableId) {
     var col = [];
     for (var i = 0; i < data.length; i++) {
@@ -228,9 +218,14 @@ function createTable(data, tableId) {
         tr = table.insertRow(-1);
         for (var j = 0; j < col.length; j++) {
             var tabCell = tr.insertCell(-1);
-            tabCell.innerHTML = data[i][col[j]];
+            if(j===3) {
+                tabCell.innerHTML = Number(data[i][col[j]]).toFixed(2);
+            } else {
+                tabCell.innerHTML = data[i][col[j]];
+            }
         }
     }
+
     // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
     var divContainer = document.getElementById("content");
     divContainer.innerHTML = "";
