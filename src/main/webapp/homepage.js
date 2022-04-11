@@ -236,6 +236,8 @@ function createTable(data, tableId) {
 // Initialize and add the map
 function initMap() {
     $("#content").html('<h3>See our location on the map</h3>');
+    $("#map").css("display", "block");
+
     // The location of the company
     const companyLocation = {
         lat: 48.15809288969533,
