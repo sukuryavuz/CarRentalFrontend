@@ -75,13 +75,12 @@ function getAvailableCars() {
             $("#content").html('<h3>There are currently no cars available.</h3>')
         } else {
             if(selectedCurrency !== "USD") {
-                convertCurrency(selectedCurrency,"availableCars");
-            } else{
-                createTable(data, "availableCars")
+                convertCurrency(selectedCurrency,data);
             }
+            createTable(data, "availableCars")
             $("#availableCars").before("<h3>Available Cars</h3>")
             let table = document.getElementById("availableCars");
-            addRentCarButtons(table, data);
+            addRentOrRemoveButtons(table, data, "rent");
             createDropDownWithCurrencies("availableCars");
             $("select option[value='"+selectedCurrency+"']").attr("selected","selected")
         }
@@ -90,11 +89,15 @@ function getAvailableCars() {
     })
 }
 
-function addRentCarButtons(table, data) {
+function addRentOrRemoveButtons(table, data, rentOrRemove) {
     for (let i = 1; i < table.rows.length; i++) {
         let row = table.rows[i];
         let cell = row.insertCell(-1);
-        cell.innerHTML = '<button id="' + data[i - 1].id + '" onclick="rentCar(' + data[i - 1].id + ')">Rent Car</button>';
+        if(rentOrRemove === "rent") {
+            cell.innerHTML = '<button id="' + data[i - 1].id + '" onclick="rentCar(' + data[i - 1].id + ')">Rent Car</button>';
+        } else if(rentOrRemove === "remove") {
+            cell.innerHTML = '<button id="' + data[i - 1].id + '" onclick="removeCar(' + data[i - 1].id + ')">Give Car back</button>';
+        }
     }
 }
 
@@ -109,7 +112,7 @@ function createDropDownWithCurrencies(table) {
         "<option value='GBP'>GBP</option>" +
         "<option value='HUF'>HUF</option>" +
         "<option value='PLN'>PLN</option>" +
-        "<option value='RUN'>RUN</option>" +
+        "<option value='RON'>RON</option>" +
         "<option value='SEK'>SEK</option>" +
         "<option value='CHF'>CHF</option>" +
         "<option value='ISK'>ISK</option>" +
@@ -126,7 +129,7 @@ function createDropDownWithCurrencies(table) {
         "<option value='INR'>INR</option>" +
         "<option value='KRW'>KRW</option>" +
         "<option value='MXN'>MXN</option>" +
-        "<option value='NYR'>NYR</option>" +
+        "<option value='MYR'>MYR</option>" +
         "<option value='NZD'>NZD</option>" +
         "<option value='PHP'>PHP</option>" +
         "<option value='SGD'>SGD</option>" +
@@ -141,7 +144,7 @@ function createDropDownWithCurrencies(table) {
 
 let selectedCurrency = "USD";
 
-function convertCurrency(currency, tableId) {
+function convertCurrency(currency, response) {
     $.ajax({
         url: "http://localhost:8080/converter/cars/" + currency,
         type: "POST",
@@ -151,7 +154,9 @@ function convertCurrency(currency, tableId) {
             Authorization: localStorage.getItem("token")
         }
     }).done(function (data) {
-        createTable(data, tableId)
+        for(let i=0; i<response.length; i++) {
+            response[i].dayPrice = data[i];
+        }
     }).fail(function (xhr) {
         alert(xhr.responseText)
     })
@@ -173,11 +178,7 @@ function getMyCars() {
             createTable(data, "myCars");
             $("#myCars").before("<h3>Your currently rented cars</h3>")
             let table = document.getElementById("myCars");
-            for (let i = 1; i < table.rows.length; i++) {
-                let row = table.rows[i];
-                let cell = row.insertCell(-1);
-                cell.innerHTML = '<button id="' + data[i - 1].id + '" onclick="removeCar(' + data[i - 1].id + ')">Give Car back</button>';
-            }
+            addRentOrRemoveButtons(table, data, "remove");
         }
     }).fail(function (xhr) {
         alert(xhr.responseText)
