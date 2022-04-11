@@ -19,6 +19,8 @@ function getAllCars() {
         } else {
             createTable(data, "allCarsId");
             $("#allCarsId").before("<h3>All of our cars</h3>")
+            createDropDownWithCurrencies("allCarsId", "currencyAllCars", getAllCars);
+            $("select option[value='"+selectedCurrency+"']").attr("selected","selected")
         }
     }).fail(function (xhr) {
         alert(xhr.responseText);
@@ -45,7 +47,7 @@ function getAvailableCars() {
             $("#availableCars").before("<h3>Available Cars</h3>")
             let table = document.getElementById("availableCars");
             addRentOrRemoveButtons(table, data, "rent");
-            createDropDownWithCurrencies("availableCars");
+            createDropDownWithCurrencies("availableCars", "currencyAvailableCars", getAvailableCars);
             $("select option[value='"+selectedCurrency+"']").attr("selected","selected")
         }
     }).fail(function (xhr) {
@@ -88,6 +90,8 @@ function getMyCars() {
             $("#myCars").before("<h3>Your currently rented cars</h3>")
             let table = document.getElementById("myCars");
             addRentOrRemoveButtons(table, data, "remove");
+            createDropDownWithCurrencies("myCars", "currencyMyCars", getMyCars);
+            $("select option[value='"+selectedCurrency+"']").attr("selected","selected")
         }
     }).fail(function (xhr) {
         alert(xhr.responseText)
@@ -124,9 +128,9 @@ function addRentOrRemoveButtons(table, data, rentOrRemove) {
     }
 }
 
-function createDropDownWithCurrencies(table) {
+function createDropDownWithCurrencies(table, selectionId, callback) {
     $("#" + table + " tr th:last-child").after(
-        "<select name='currency' id='currency'>" +
+        "<select name='"+selectionId+"' id='"+selectionId+"'>" +
         "<option value='USD'>USD</option>" +
         "<option value='JPY'>JPY</option>" +
         "<option value='BGN'>BGN</option>" +
@@ -159,9 +163,9 @@ function createDropDownWithCurrencies(table) {
         "<option value='THB'>THB</option>" +
         "<option value='ZAR'>ZAR</option>" +
         "</select>")
-    $("#currency").on("change", function () {
-        selectedCurrency = $("#currency").find(":selected").text();
-        getAvailableCars();
+    $("#"+selectionId+"").on("change", function () {
+        selectedCurrency = $("#"+selectionId+"").find(":selected").text();
+        callback();
     })
 }
 
