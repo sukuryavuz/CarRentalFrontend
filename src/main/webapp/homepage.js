@@ -17,6 +17,10 @@ function getAllCars() {
         if (data.length === 0) {
             $("#content").html('<h3>There are currently no cars to show</h3>')
         } else {
+            if(selectedCurrency !== "USD") {
+                let url = "http://localhost:8080/converter/cars/" + selectedCurrency;
+                convertCurrency(url, data);
+            }
             createTable(data, "allCarsId");
             $("#allCarsId").before("<h3>All of our cars</h3>")
             createDropDownWithCurrencies("allCarsId", "currencyAllCars", getAllCars);
@@ -41,7 +45,8 @@ function getAvailableCars() {
             $("#content").html('<h3>There are currently no cars available.</h3>')
         } else {
             if(selectedCurrency !== "USD") {
-                convertCurrency(selectedCurrency,data);
+                let url = "http://localhost:8080/converter/cars/availableCars/" + selectedCurrency;
+                convertCurrency(url, data);
             }
             createTable(data, "availableCars")
             $("#availableCars").before("<h3>Available Cars</h3>")
@@ -86,6 +91,10 @@ function getMyCars() {
         if (data.length === 0) {
             $("#content").html('<h3>You have no cars rented</h3>')
         } else {
+            if(selectedCurrency !== "USD") {
+                let url = "http://localhost:8080/converter/users/" + localStorage.getItem("userID") + "/cars/" + selectedCurrency;
+                convertCurrency(url, data);
+            }
             createTable(data, "myCars");
             $("#myCars").before("<h3>Your currently rented cars</h3>")
             let table = document.getElementById("myCars");
@@ -171,9 +180,9 @@ function createDropDownWithCurrencies(table, selectionId, callback) {
 
 let selectedCurrency = "USD";
 
-function convertCurrency(currency, response) {
+function convertCurrency(url, response) {
     $.ajax({
-        url: "http://localhost:8080/converter/cars/" + currency,
+        url: url,
         type: "POST",
         dataType: "json",
         async: false,
