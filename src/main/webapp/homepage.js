@@ -130,9 +130,9 @@ function addRentOrRemoveButtons(table, data, rentOrRemove) {
         let row = table.rows[i];
         let cell = row.insertCell(-1);
         if(rentOrRemove === "rent") {
-            cell.innerHTML = '<button id="' + data[i - 1].id + '" onclick="rentCar(' + data[i - 1].id + ')">Rent Car</button>';
+            cell.innerHTML = '<button class="rentCarBtns" id="' + data[i - 1].id + '" onclick="rentCar(' + data[i - 1].id + ')">Rent Car</button>';
         } else if(rentOrRemove === "remove") {
-            cell.innerHTML = '<button id="' + data[i - 1].id + '" onclick="removeCar(' + data[i - 1].id + ')">Give Car back</button>';
+            cell.innerHTML = '<button class="giveCarBackBtns" id="' + data[i - 1].id + '" onclick="removeCar(' + data[i - 1].id + ')">Give Car back</button>';
         }
     }
 }
