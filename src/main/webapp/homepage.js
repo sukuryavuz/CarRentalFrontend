@@ -33,7 +33,11 @@ function getAllCars() {
             $("select option[value='"+selectedCurrency+"']").attr("selected","selected")
         }
     }).fail(function (xhr) {
-        alert(xhr.responseText);
+        if(xhr.status === 500) {
+            alert("Currency Converter is currently not available. Please try later again")
+        } else {
+            alert(xhr.responseText);
+        }
     })
 }
 
@@ -66,7 +70,11 @@ function getAvailableCars() {
             $("select option[value='"+selectedCurrency+"']").attr("selected","selected")
         }
     }).fail(function (xhr) {
-        alert(xhr.responseText);
+        if(xhr.status === 500) {
+            alert("Currency Converter is currently not available. Please try later again.")
+        } else {
+            alert(xhr.responseText);
+        }
     })
 }
 
