@@ -76,10 +76,10 @@ function getAvailableCars() {
         } else {
             if(selectedCurrency !== "USD") {
                 convertCurrency(selectedCurrency,"availableCars");
-                createTable(currencyResponse, "availableCars")
             } else{
                 createTable(data, "availableCars")
             }
+            $("#availableCars").before("<h3>Available Cars</h3>")
             let table = document.getElementById("availableCars");
             addRentCarButtons(table, data);
             createDropDownWithCurrencies("availableCars");
@@ -140,13 +140,8 @@ function createDropDownWithCurrencies(table) {
 }
 
 let selectedCurrency = "USD";
-let currencyResponse;
 
-function getCurrencyResponse(data) {
-    currencyResponse = data;
-}
-
-function convertCurrency(currency) {
+function convertCurrency(currency, tableId) {
     $.ajax({
         url: "http://localhost:8080/converter/cars/" + currency,
         type: "POST",
@@ -156,7 +151,7 @@ function convertCurrency(currency) {
             Authorization: localStorage.getItem("token")
         }
     }).done(function (data) {
-        getCurrencyResponse(data);
+        createTable(data, tableId)
     }).fail(function (xhr) {
         alert(xhr.responseText)
     })
