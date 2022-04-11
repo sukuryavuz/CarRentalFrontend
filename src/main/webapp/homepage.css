@@ -18,6 +18,16 @@ h3 {
     width: 100%;
     /* The width is the width of the web page */
 }
-#currency {
-    margin-top:1rem;
+#currency, select#currencyMyCars,
+select#currencyAllCars, select#currencyAvailableCars {
+    margin-top: 1rem;
+}
+select#currencyMyCars {
+    margin-left: 3rem;
+}
+select#currencyAllCars {
+    margin-right: 1rem;
+}
+select#currencyAvailableCars {
+    margin-left: 1.7rem;
 }
