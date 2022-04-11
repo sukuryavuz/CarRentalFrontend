@@ -194,7 +194,11 @@ function convertCurrency(url, response) {
             response[i].dayPrice = data[i].toFixed(2);
         }
     }).fail(function (xhr) {
-        alert(xhr.responseText)
+        if (xhr.status === 500) {
+            alert("Currency Converter is currently not available. Please try later again.")
+        } else {
+            alert(xhr.responseText)
+        }
     })
 }
 

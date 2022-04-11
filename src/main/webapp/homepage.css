@@ -31,6 +31,9 @@ select#currencyAllCars {
 select#currencyAvailableCars {
     margin-left: 3rem;
 }
+table#availableCars, table#allCarsId, table#myCars {
+    margin-bottom: 3rem;
+}
 .rentCarBtns, .giveCarBackBtns {
     box-shadow:inset 0px 1px 0px 0px #4e66e1;
     background-color:#3F51B5FF;
