@@ -76,13 +76,14 @@ function getAvailableCars() {
         } else {
             if(selectedCurrency !== "USD") {
                 convertCurrency(selectedCurrency,"availableCars");
+                createTable(currencyResponse, "availableCars")
             } else{
                 createTable(data, "availableCars")
-                let table = document.getElementById("availableCars");
-                addRentCarButtons(table, data);
-                createDropDownWithCurrencies("availableCars");
-                $("select option[value='"+selectedCurrency+"']").attr("selected","selected")
             }
+            let table = document.getElementById("availableCars");
+            addRentCarButtons(table, data);
+            createDropDownWithCurrencies("availableCars");
+            $("select option[value='"+selectedCurrency+"']").attr("selected","selected")
         }
     }).fail(function (xhr) {
         alert(xhr.responseText);
@@ -139,24 +140,23 @@ function createDropDownWithCurrencies(table) {
 }
 
 let selectedCurrency = "USD";
+let currencyResponse;
 
-function convertCurrency(currency, tableId) {
+function getCurrencyResponse(data) {
+    currencyResponse = data;
+}
+
+function convertCurrency(currency) {
     $.ajax({
         url: "http://localhost:8080/converter/cars/" + currency,
         type: "POST",
         dataType: "json",
+        async: false,
         headers: {
             Authorization: localStorage.getItem("token")
         }
     }).done(function (data) {
-        // for(let i=1; i<table.rows.length; i++) {
-        //     table.rows[i].cells[3].innerHTML = data[i-1].toFixed(2);
-        // }
-        createTable(data, tableId);
-        let table = document.getElementById("availableCars");
-        addRentCarButtons(table, data);
-        createDropDownWithCurrencies("availableCars");
-        $("select option[value='"+selectedCurrency+"']").attr("selected","selected")
+        getCurrencyResponse(data);
     }).fail(function (xhr) {
         alert(xhr.responseText)
     })
