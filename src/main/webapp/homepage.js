@@ -191,7 +191,7 @@ function convertCurrency(url, response) {
         }
     }).done(function (data) {
         for(let i=0; i<response.length; i++) {
-            response[i].dayPrice = data[i];
+            response[i].dayPrice = data[i].toFixed(2);
         }
     }).fail(function (xhr) {
         alert(xhr.responseText)
