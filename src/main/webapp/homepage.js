@@ -28,7 +28,7 @@ function getAllCars() {
             $("select option[value='" + selectedCurrency + "']").attr("selected", "selected")
         }
     }).fail(function (xhr) {
-        alert(xhr.responseText);
+            alert(xhr.responseText);
     })
 }
 
@@ -56,7 +56,11 @@ function getAvailableCars() {
             $("select option[value='" + selectedCurrency + "']").attr("selected", "selected")
         }
     }).fail(function (xhr) {
-        alert(xhr.responseText);
+        if(xhr.status === 500) {
+            alert("Currency Converter is currently not available. Please try later again.")
+        } else {
+            alert(xhr.responseText);
+        }
     })
 }
 
@@ -102,11 +106,15 @@ function getMyCars() {
             $("select option[value='" + selectedCurrency + "']").attr("selected", "selected")
         }
     }).fail(function (xhr) {
-        alert(xhr.responseText)
+        if(xhr.status === 500) {
+            alert("Currency Converter is currently not available. Please try later again.")
+        } else {
+            alert(xhr.responseText)
+        }
     })
 }
 
-// give Car back
+// return car
 function removeCar(carIDremove) {
     let text = "Do you want to give the Car with ID: " + carIDremove + " back?"
     if (confirm(text) === true) {
@@ -130,8 +138,8 @@ function addRentOrRemoveButtons(table, data, rentOrRemove) {
         let cell = row.insertCell(-1);
         if (rentOrRemove === "rent") {
             cell.innerHTML = '<button class="rentCarBtns" id="' + data[i - 1].id + '" onclick="rentCar(' + data[i - 1].id + ')">Rent Car</button>';
-        } else if (rentOrRemove === "remove") {
-            cell.innerHTML = '<button class="giveCarBackBtns" id="' + data[i - 1].id + '" onclick="removeCar(' + data[i - 1].id + ')">Give Car back</button>';
+        } else if(rentOrRemove === "remove") {
+            cell.innerHTML = '<button class="giveCarBackBtns" id="' + data[i - 1].id + '" onclick="removeCar(' + data[i - 1].id + ')">Return Car</button>';
         }
     }
 }
