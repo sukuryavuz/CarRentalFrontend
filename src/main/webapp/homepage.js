@@ -58,6 +58,8 @@ function getAvailableCars() {
     }).fail(function (xhr) {
         if(xhr.status === 500) {
             alert("Currency Converter is currently not available. Please try later again.")
+            selectedCurrency = 'USD'
+            getAvailableCars()
         } else {
             alert(xhr.responseText);
         }
@@ -108,6 +110,8 @@ function getMyCars() {
     }).fail(function (xhr) {
         if(xhr.status === 500) {
             alert("Currency Converter is currently not available. Please try later again.")
+            selectedCurrency = 'USD'
+            getAvailableCars()
         } else {
             alert(xhr.responseText)
         }
