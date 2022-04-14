@@ -148,7 +148,6 @@ function createDropDownWithCurrencies(table, selectionId, callback) {
     $("#" + table + " tr th:last-child").after(
         "<select name='" + selectionId + "' id='" + selectionId + "'>" +
         "<option value='USD'>USD</option>" +
-        "<option value='EUR'>EUR</option>" +
         "<option value='JPY'>JPY</option>" +
         "<option value='BGN'>BGN</option>" +
         "<option value='CZK'>CZK</option>" +
