@@ -4,12 +4,9 @@ $(document).ready(function () {
     console.log(localStorage.getItem("token"))
 });
 
-let selectedCurrency = "USD";
-
 function getAllCars() {
-    $("#map").css("display", "none");
     let url, type;
-    url = "http://localhost:8080/cars?currency=" + selectedCurrency;
+    url = "http://localhost:8080/cars?currency=" + localStorage.getItem("selectedCurrency");
     type = "GET";
     $.ajax({
         url: url,
@@ -25,7 +22,7 @@ function getAllCars() {
             createTable(data, "allCarsId");
             $("#allCarsId").before("<h3>All of our cars</h3>")
             createDropDownWithCurrencies("allCarsId", "currencyAllCars", getAllCars);
-            $("select option[value='" + selectedCurrency + "']").attr("selected", "selected")
+            $("select option[value='" + localStorage.getItem("selectedCurrency") + "']").attr("selected", "selected")
         }
     }).fail(function (xhr) {
             alert(xhr.responseText);
@@ -33,9 +30,8 @@ function getAllCars() {
 }
 
 function getAvailableCars() {
-    $("#map").css("display", "none");
     let url, type;
-    url = "http://localhost:8080/cars/availableCars?currency=" + selectedCurrency;
+    url = "http://localhost:8080/cars/availableCars?currency=" + localStorage.getItem("selectedCurrency");
     type = "GET";
     $.ajax({
         url: url,
@@ -53,12 +49,12 @@ function getAvailableCars() {
             let table = document.getElementById("availableCars");
             addRentOrRemoveButtons(table, data, "rent");
             createDropDownWithCurrencies("availableCars", "currencyAvailableCars", getAvailableCars);
-            $("select option[value='" + selectedCurrency + "']").attr("selected", "selected")
+            $("select option[value='" + localStorage.getItem("selectedCurrency") + "']").attr("selected", "selected")
         }
     }).fail(function (xhr) {
         if(xhr.status === 500) {
             alert("Currency Converter is currently not available. Please try later again.")
-            selectedCurrency = 'USD'
+            localStorage.setItem("selectedCurrency", "USD");
             getAvailableCars()
         } else {
             alert(xhr.responseText);
@@ -85,9 +81,8 @@ function rentCar(carIDrent) {
 }
 
 function getMyCars() {
-    $("#map").css("display", "none");
     let url, type;
-    url = "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars?currency=" + selectedCurrency;
+    url = "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars?currency=" + localStorage.getItem("selectedCurrency");
     type = "GET";
     $.ajax({
         url: url,
@@ -105,12 +100,12 @@ function getMyCars() {
             let table = document.getElementById("myCars");
             addRentOrRemoveButtons(table, data, "remove");
             createDropDownWithCurrencies("myCars", "currencyMyCars", getMyCars);
-            $("select option[value='" + selectedCurrency + "']").attr("selected", "selected")
+            $("select option[value='" + localStorage.getItem("selectedCurrency") + "']").attr("selected", "selected")
         }
     }).fail(function (xhr) {
         if(xhr.status === 500) {
             alert("Currency Converter is currently not available. Please try later again.")
-            selectedCurrency = 'USD'
+            localStorage.setItem("selectedCurrency", "USD");
             getAvailableCars()
         } else {
             alert(xhr.responseText)
@@ -184,7 +179,8 @@ function createDropDownWithCurrencies(table, selectionId, callback) {
         "<option value='ZAR'>ZAR</option>" +
         "</select>")
     $("#" + selectionId + "").on("change", function () {
-        selectedCurrency = $("#" + selectionId + "").find(":selected").text();
+        let selectedCurrency = $("#" + selectionId + "").find(":selected").text();
+        localStorage.setItem("selectedCurrency", selectedCurrency);
         callback();
     })
 }

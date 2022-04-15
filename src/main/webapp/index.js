@@ -1,5 +1,6 @@
 // sobald sich der User einlogged, wird der username, die userID und der token im localstorage gespeichert
 $(document).ready(function() {
+    localStorage.setItem("selectedCurrency", "USD");
     var username, password, userID
     $("#register").on("click", function () {
         username = $("#username").val()
