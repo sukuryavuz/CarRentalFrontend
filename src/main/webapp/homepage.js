@@ -25,7 +25,13 @@ function getAllCars() {
             $("select option[value='" + localStorage.getItem("selectedCurrency") + "']").attr("selected", "selected")
         }
     }).fail(function (xhr) {
+        if(xhr.status === 500) {
+            alert("Currency Converter is currently not available. Please try later again.")
+            localStorage.setItem("selectedCurrency", "USD");
+            getAllCars()
+        } else {
             alert(xhr.responseText);
+        }
     })
 }
 
@@ -106,7 +112,7 @@ function getMyCars() {
         if(xhr.status === 500) {
             alert("Currency Converter is currently not available. Please try later again.")
             localStorage.setItem("selectedCurrency", "USD");
-            getAvailableCars()
+            getMyCars()
         } else {
             alert(xhr.responseText)
         }
@@ -227,7 +233,7 @@ function createTable(data, tableId) {
 
 // Initialize and add the map
 function initMap() {
-    $("#content").html('<h3>See our location on the map</h3>');
+    $("#content").html('<h3>Our Location</h3>');
     $("#map").css("display", "block");
 
     // The location of the company
