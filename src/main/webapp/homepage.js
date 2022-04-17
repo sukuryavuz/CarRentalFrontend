@@ -4,9 +4,12 @@ $(document).ready(function () {
     console.log(localStorage.getItem("token"))
 });
 
+let baseURL_dev = "http://localhost:8080/"
+let baseURL_prod = "https://carrentalgrup3.azurewebsites.net/"
+
 function getAllCars() {
     let url, type;
-    url = "http://localhost:8080/cars?currency=" + localStorage.getItem("selectedCurrency");
+    url = baseURL_dev + "cars?currency=" + localStorage.getItem("selectedCurrency");
     type = "GET";
     $.ajax({
         url: url,
@@ -37,7 +40,7 @@ function getAllCars() {
 
 function getAvailableCars() {
     let url, type;
-    url = "http://localhost:8080/cars/availableCars?currency=" + localStorage.getItem("selectedCurrency");
+    url = baseURL_dev + "cars/availableCars?currency=" + localStorage.getItem("selectedCurrency");
     type = "GET";
     $.ajax({
         url: url,
@@ -73,7 +76,7 @@ function rentCar(carIDrent) {
     let text = "Do you want to rent the Car with ID: " + carIDrent + "?"
     if (confirm(text) === true) {
         $.ajax({
-            url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars/" + carIDrent,
+            url: baseURL_dev + "users/" + localStorage.getItem("userID") + "/cars/" + carIDrent,
             type: "POST",
             headers: {
                 Authorization: localStorage.getItem("token")
@@ -88,7 +91,7 @@ function rentCar(carIDrent) {
 
 function getMyCars() {
     let url, type;
-    url = "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars?currency=" + localStorage.getItem("selectedCurrency");
+    url = baseURL_dev + "users/" + localStorage.getItem("userID") + "/cars?currency=" + localStorage.getItem("selectedCurrency");
     type = "GET";
     $.ajax({
         url: url,
@@ -124,7 +127,7 @@ function removeCar(carIDremove) {
     let text = "Do you want to give the Car with ID: " + carIDremove + " back?"
     if (confirm(text) === true) {
         $.ajax({
-            url: "http://localhost:8080/users/" + localStorage.getItem("userID") + "/cars/" + carIDremove,
+            url: baseURL_dev + "users/" + localStorage.getItem("userID") + "/cars/" + carIDremove,
             type: "DELETE",
             headers: {
                 Authorization: localStorage.getItem("token")
