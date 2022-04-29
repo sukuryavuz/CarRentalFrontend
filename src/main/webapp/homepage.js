@@ -235,17 +235,22 @@ function createTable(data, tableId) {
     divContainer.appendChild(table);
 
     //ADD ONCLICK FUNCTION TO DAYPRICE TO SORT COLUMN
+    addOnclickToSortTableByColumnName(table, "dayPrice");
+    addOnclickToSortTableByColumnName(table, "availableSeats");
+}
+
+function addOnclickToSortTableByColumnName(table, columnName) {
     for (let i = 0; i < table.rows[0].cells.length; i++) {
-        if (table.rows[0].cells[i].innerHTML === "dayPrice") {
+        if (table.rows[0].cells[i].innerHTML === columnName) {
             let cell = table.rows[0].cells[i];
             cell.onclick = function () {
-                sortTableByDayPrice(table, i);
+                sortTableColumn(table, i);
             }
         }
     }
 }
 
-function sortTableByDayPrice(table, columnNumber) {
+function sortTableColumn(table, columnNumber) {
     var rows, switching, i, x, y, shouldSwitch;
     switching = true;
     while (switching) {
