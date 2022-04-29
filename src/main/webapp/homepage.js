@@ -237,6 +237,15 @@ function createTable(data, tableId) {
     //ADD ONCLICK FUNCTION TO DAYPRICE TO SORT COLUMN
     addOnclickToSortTableByColumnName(table, "dayPrice");
     addOnclickToSortTableByColumnName(table, "availableSeats");
+    addCarPicture(table);
+}
+
+function addCarPicture(table) {
+    for(let i=0; i<table.rows.length; i++) {
+        let cell = table.rows[i].insertCell(0);
+        if(i===0) continue;
+        cell.innerHTML = '<img src="images/audiq5.png" alt="">';
+    }
 }
 
 function addOnclickToSortTableByColumnName(table, columnName) {
