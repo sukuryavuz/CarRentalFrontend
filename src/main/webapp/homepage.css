@@ -33,6 +33,7 @@ select#currencyAvailableCars {
 }
 table#availableCars, table#allCarsId, table#myCars {
     margin-bottom: 3rem;
+    width: 80%;
 }
 .rentCarBtns, .giveCarBackBtns {
     box-shadow:inset 0px 1px 0px 0px #4e66e1;
@@ -59,7 +60,4 @@ tr:not(:first-child) {
 }
 td {
     text-align:left!important;
-}
-table {
-    width: 80%;
 }
