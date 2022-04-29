@@ -28,7 +28,7 @@ function getAllCars() {
             $("select option[value='" + localStorage.getItem("selectedCurrency") + "']").attr("selected", "selected")
         }
     }).fail(function (xhr) {
-        if(xhr.status === 500) {
+        if (xhr.status === 500) {
             alert("Currency Converter is currently not available. Please try later again.")
             localStorage.setItem("selectedCurrency", "USD");
             getAllCars()
@@ -61,7 +61,7 @@ function getAvailableCars() {
             $("select option[value='" + localStorage.getItem("selectedCurrency") + "']").attr("selected", "selected")
         }
     }).fail(function (xhr) {
-        if(xhr.status === 500) {
+        if (xhr.status === 500) {
             alert("Currency Converter is currently not available. Please try later again.")
             localStorage.setItem("selectedCurrency", "USD");
             getAvailableCars()
@@ -110,9 +110,10 @@ function getMyCars() {
             addRentOrRemoveButtons(table, data, "remove");
             createDropDownWithCurrencies("myCars", "currencyMyCars", getMyCars);
             $("select option[value='" + localStorage.getItem("selectedCurrency") + "']").attr("selected", "selected")
+
         }
     }).fail(function (xhr) {
-        if(xhr.status === 500) {
+        if (xhr.status === 500) {
             alert("Currency Converter is currently not available. Please try later again.")
             localStorage.setItem("selectedCurrency", "USD");
             getMyCars()
@@ -146,7 +147,7 @@ function addRentOrRemoveButtons(table, data, rentOrRemove) {
         let cell = row.insertCell(-1);
         if (rentOrRemove === "rent") {
             cell.innerHTML = '<button class="rentCarBtns" id="' + data[i - 1].id + '" onclick="rentCar(' + data[i - 1].id + ')">Rent Car</button>';
-        } else if(rentOrRemove === "remove") {
+        } else if (rentOrRemove === "remove") {
             cell.innerHTML = '<button class="giveCarBackBtns" id="' + data[i - 1].id + '" onclick="removeCar(' + data[i - 1].id + ')">Return Car</button>';
         }
     }
@@ -232,6 +233,38 @@ function createTable(data, tableId) {
     var divContainer = document.getElementById("content");
     divContainer.innerHTML = "";
     divContainer.appendChild(table);
+
+    //ADD ONCLICK FUNCTION TO DAYPRICE TO SORT COLUMN
+    for (let i = 0; i < table.rows[0].cells.length; i++) {
+        if (table.rows[0].cells[i].innerHTML === "dayPrice") {
+            let cell = table.rows[0].cells[i];
+            cell.onclick = function () {
+                sortTableByDayPrice(table, i);
+            }
+        }
+    }
+}
+
+function sortTableByDayPrice(table, columnNumber) {
+    var rows, switching, i, x, y, shouldSwitch;
+    switching = true;
+    while (switching) {
+        switching = false;
+        rows = table.rows;
+        for (i = 1; i < (rows.length - 1); i++) {
+            shouldSwitch = false;
+            x = rows[i].getElementsByTagName("TD")[columnNumber];
+            y = rows[i + 1].getElementsByTagName("TD")[columnNumber];
+            if (Number(x.innerHTML) > Number(y.innerHTML)) {
+                shouldSwitch = true;
+                break;
+            }
+        }
+        if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+        }
+    }
 }
 
 // Initialize and add the map
@@ -268,4 +301,5 @@ function preventBack() {
 
 setTimeout("preventBack()", 0);
 
-window.onunload = function () {};
+window.onunload = function () {
+};
