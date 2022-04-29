@@ -235,9 +235,9 @@ function createTable(data, tableId) {
     divContainer.appendChild(table);
 
     //ADD ONCLICK FUNCTION TO DAYPRICE TO SORT COLUMN
+    addCarPicture(table);
     addOnclickToSortTableByColumnName(table, "dayPrice");
     addOnclickToSortTableByColumnName(table, "availableSeats");
-    addCarPicture(table);
 }
 
 function addCarPicture(table) {
