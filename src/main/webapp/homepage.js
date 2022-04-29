@@ -207,6 +207,7 @@ function createTable(data, tableId) {
     var table = document.createElement("table");
     table.setAttribute("class", "mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp");
     table.setAttribute("id", tableId);
+    table.setAttribute("width", "80%");
     // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
     var tr = table.insertRow(-1);                   // TABLE ROW.
     for (var i = 0; i < col.length; i++) {
