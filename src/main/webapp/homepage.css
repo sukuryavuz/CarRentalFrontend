@@ -54,3 +54,12 @@ table#availableCars, table#allCarsId, table#myCars {
     position:relative;
     top:1px;
 }
+tr:not(:first-child) {
+    line-height: 9rem;
+}
+td {
+    text-align:left!important;
+}
+table {
+    width: 80%;
+}
