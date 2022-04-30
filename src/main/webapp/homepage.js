@@ -26,6 +26,7 @@ function getAllCars() {
             $("#allCarsId").before("<h3>All of our cars</h3>")
             createDropDownWithCurrencies("allCarsId", "currencyAllCars", getAllCars);
             $("select option[value='" + localStorage.getItem("selectedCurrency") + "']").attr("selected", "selected")
+            $("td:last-child").after("<td></td>")
         }
     }).fail(function (xhr) {
         if (xhr.status === 500) {
