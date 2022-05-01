@@ -24,6 +24,7 @@ function getAllCars() {
         } else {
             createTable(data, "allCarsId");
             $("#allCarsId").before("<h3>All of our cars</h3>")
+            createDetailsLink(document.getElementById("allCarsId"));
             createDropDownWithCurrencies("allCarsId", "currencyAllCars", getAllCars);
             $("select option[value='" + localStorage.getItem("selectedCurrency") + "']").attr("selected", "selected")
         }
@@ -110,7 +111,6 @@ function getMyCars() {
             addRentOrRemoveButtons(table, data, "remove");
             createDropDownWithCurrencies("myCars", "currencyMyCars", getMyCars);
             $("select option[value='" + localStorage.getItem("selectedCurrency") + "']").attr("selected", "selected")
-
         }
     }).fail(function (xhr) {
         if (xhr.status === 500) {
@@ -120,6 +120,28 @@ function getMyCars() {
         } else {
             alert(xhr.responseText)
         }
+    })
+}
+
+function getCarDetails() {
+    let url, type;
+    let urlParams = getValueFromUrl();
+    let id = urlParams.id;
+    url = baseURL_dev + "cars/" + id;
+    type = "GET";
+    $.ajax({
+        url: url,
+        type: type,
+        dataType: 'json',
+        headers: {
+            Authorization: localStorage.getItem("token")
+        }
+    }).done(function (data) {
+        let description = document.getElementById("imageDescription");
+        description.innerHTML = "The car has " + data.availableSeats + " available Seats. It has a " + data.transmission + " transmission. "
+        + " The car costs " + data.dayPrice + " USD per day.";
+    }).fail(function (xhr) {
+        alert(xhr.responseText);
     })
 }
 
@@ -279,6 +301,28 @@ function sortTableColumn(table, columnNumber) {
             switching = true;
         }
     }
+}
+
+function createDetailsLink(table) {
+    let id, url, cell, rows;
+
+    for (let i = 0; i < table.rows[0].cells.length; i++) {
+        if (table.rows[0].cells[i].innerHTML === "id") {
+            rows = table.rows;
+            for (let j = 1; j < rows.length; j++) {
+                id = Number(rows[j].getElementsByTagName("TD")[i].innerHTML);
+                cell = table.rows[j].insertCell(-1);
+                url = "car.html?id=" + id;
+                cell.innerHTML = '<a href='+url+'>See Details</a>'
+            }
+        }
+    }
+}
+
+function getValueFromUrl() {
+    return new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+    });
 }
 
 // Initialize and add the map

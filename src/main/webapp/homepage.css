@@ -61,3 +61,13 @@ tr:not(:first-child) {
 td {
     text-align:center!important;
 }
+
+#carImage {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+p#imageDescription {
+    text-align: center;
+}
