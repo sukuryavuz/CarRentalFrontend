@@ -238,6 +238,7 @@ function createTable(data, tableId) {
     for (var i = 0; i < col.length; i++) {
         var th = document.createElement("th");      // TABLE HEADER.
         th.setAttribute("class", "mdl-data-table__cell--non-numeric");
+        th.setAttribute("id", col[i]);
         th.innerHTML = col[i];
         tr.appendChild(th);
     }
