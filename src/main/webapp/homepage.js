@@ -4,6 +4,8 @@ $(document).ready(function () {
     console.log(localStorage.getItem("token"))
 });
 
+const DAYPRICE_COLUMNNUMBER = 4;
+const AVAILABLESEATS_COLUMNNUMBER = 2;
 let baseURL_dev = "http://localhost:8080/"
 let baseURL_prod = "https://carrentalgrup3.azurewebsites.net/"
 
@@ -259,8 +261,8 @@ function createTable(data, tableId) {
 
     //ADD ONCLICK FUNCTION TO DAYPRICE TO SORT COLUMN
     addCarPicture(table);
-    addOnclickToSortTableByColumnName(table, "dayPrice");
-    addOnclickToSortTableByColumnName(table, "availableSeats");
+    addClickListenerToSortColumn(table, "dayPrice", DAYPRICE_COLUMNNUMBER);
+    addClickListenerToSortColumn(table, "availableSeats", AVAILABLESEATS_COLUMNNUMBER);
 }
 
 function addCarPicture(table) {
@@ -271,16 +273,16 @@ function addCarPicture(table) {
     }
 }
 
-function addOnclickToSortTableByColumnName(table, columnName) {
-    for (let i = 0; i < table.rows[0].cells.length; i++) {
-        if (table.rows[0].cells[i].innerHTML === columnName) {
-            let cell = table.rows[0].cells[i];
-            cell.onclick = function () {
-                sortTableColumn(table, i);
-            }
-        }
-    }
-}
+// function addOnclickToSortTableByColumnName(table, columnName) {
+//     for (let i = 0; i < table.rows[0].cells.length; i++) {
+//         if (table.rows[0].cells[i].innerHTML === columnName) {
+//             let cell = table.rows[0].cells[i];
+//             cell.onclick = function () {
+//                 sortTableColumn(table, i);
+//             }
+//         }
+//     }
+// }
 
 function sortTableColumn(table, columnNumber) {
     var rows, switching, i, x, y, shouldSwitch;
@@ -324,6 +326,15 @@ function getValueFromUrl() {
     return new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop),
     });
+}
+
+function addClickListenerToSortColumn(table, columnId, columnNumber) {
+    let dayPriceHeader = document.getElementById(columnId);
+    dayPriceHeader.style.cursor = "pointer";
+    dayPriceHeader.innerHTML += ' <img src="images/sortieren.png" alt="" width="12px">';
+    document.getElementById(columnId).addEventListener('click', function () {
+        sortTableColumn(table, columnNumber);
+    })
 }
 
 // Initialize and add the map
